@@ -1,282 +1,307 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#087443">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>QUICKMart POS</title>
 <style>
-:root {
-  --green: #087443;
-  --light: #eaf7ef;
-  --white: #fff;
-  --text: #19352a;
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f2f6f3;
-  color: var(--text);
-}
-button, input, select { font: inherit; }
-button {
-  border: 0;
-  padding: 12px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.primary { background: var(--green); color: white; }
-.secondary { background: #e1f0e6; color: var(--green); }
-.danger { background: #b42318; color: white; }
-input, select {
-  width: 100%;
-  padding: 12px;
-  margin: 6px 0 12px;
-  border: 1px solid #ccd9d0;
-  border-radius: 8px;
-  background: white;
-}
-label { font-weight: bold; font-size: 14px; }
-h1, h2, h3 { margin-top: 0; }
-.brand { color: var(--green); font-weight: 900; }
-.tagline { color: #60776a; font-style: italic; }
-.card {
-  background: white;
-  border-radius: 14px;
-  padding: 18px;
-  margin: 12px 0;
-  box-shadow: 0 2px 9px #0000000b;
-}
-#loginPage {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 18px;
-}
-.login-card {
-  background: white;
-  width: 100%;
-  max-width: 390px;
-  padding: 28px;
-  border-radius: 18px;
-  box-shadow: 0 8px 30px #00000012;
-}
-.center { text-align: center; }
-#app { display: none; }
-header {
-  background: var(--green);
-  color: white;
-  padding: 18px;
-}
-header h2 { margin: 0 0 4px; }
-header .tagline { color: #e1f7e9; }
-nav {
-  display: flex;
-  gap: 7px;
-  padding: 10px;
-  overflow-x: auto;
-  background: white;
-  position: sticky;
-  top: 0;
-}
-nav button { white-space: nowrap; }
-main { padding: 12px; max-width: 1000px; margin: auto; }
-.tab { display: none; }
-.tab.active { display: block; }
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
-  gap: 10px;
-}
-.stat {
-  background: var(--light);
-  padding: 15px;
-  border-radius: 12px;
-}
-.stat strong { display: block; font-size: 22px; margin-top: 8px; }
-table { width: 100%; border-collapse: collapse; }
-th, td {
-  text-align: left;
-  padding: 9px 5px;
-  border-bottom: 1px solid #e5ece7;
-  font-size: 13px;
-}
-.table-wrap { overflow-x: auto; }
-.small { font-size: 12px; color: #66776d; }
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-footer { text-align: center; padding: 20px; color: #75857b; }
-@media print {
-  nav, button, #settings, #loginPage { display: none !important; }
-  body { background: white; }
-}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f2f5f3;color:#203027}
+header{background:#126b43;color:white;padding:16px}
+h1,h2,h3{margin-top:0}
+main{padding:14px;max-width:850px;margin:auto}
+.card{background:white;padding:16px;margin:12px 0;border-radius:12px;box-shadow:0 2px 7px #0001}
+input,select,button{width:100%;padding:12px;margin:6px 0;border-radius:7px;border:1px solid #bbb;font-size:16px}
+button{background:#126b43;color:white;border:0;font-weight:bold}
+button.secondary{background:#e2eee7;color:#164d32}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:8px;background:white}
+nav button{font-size:13px;padding:10px 4px}
+.hidden{display:none!important}
+.error{color:#b42318}
+.success{color:#126b43}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:8px;border-bottom:1px solid #ddd}
+.small{font-size:13px;color:#555}
 </style>
 </head>
 <body>
 
 <section id="loginPage">
-  <div class="login-card center">
-    <h1 class="brand" id="loginStore">QUICKMart POS</h1>
-    <p class="tagline">Your Needs, Our Priority.</p>
-    <hr>
-    <h3>Welcome!</h3>
-    <p>Mag-login upang magpatuloy.</p>
-    <form id="loginForm">
-      <label for="username">Username</label>
-      <input id="username" autocomplete="username" required>
-      <label for="password">Password</label>
-      <input id="password" type="password"
-        autocomplete="current-password" required>
-      <button class="primary" style="width:100%" type="submit">
-        LOGIN
-      </button>
-    </form>
-    <p id="loginError" style="color:#b42318"></p>
-    <p class="small">QUICKMart POS · Offline starter version</p>
+ <main>
+  <div class="card">
+   <h1 id="loginStore">QUICKMart POS</h1>
+   <p>Your Needs, Our Priority.</p>
+   <hr>
+   <h3>Welcome!</h3>
+   <p>Mag-login upang magpatuloy.</p>
+   <form id="loginForm">
+    <label>Username</label>
+    <input id="username" autocomplete="username" required>
+    <label>Password</label>
+    <input id="password" type="password" autocomplete="current-password" required>
+    <button type="submit">LOGIN</button>
+   </form>
+   <p id="loginError" class="error"></p>
+   <p class="small">Demo login: owner / QMowner123!</p>
   </div>
+ </main>
 </section>
 
-<div id="app">
-  <header>
-    <div class="row">
-      <div>
-        <h2 id="headerStore">QUICKMart Store</h2>
-        <div class="tagline">Your Needs, Our Priority.</div>
-      </div>
-      <button id="logoutBtn">LOGOUT</button>
-    </div>
-    <p id="welcome" style="margin-bottom:0"></p>
-  </header>
+<div id="app" class="hidden">
+ <header>
+  <h2 id="headerStore">QUICKMart Store</h2>
+  <p>Your Needs, Our Priority.</p>
+  <p id="welcome"></p>
+  <button id="logoutBtn">LOGOUT</button>
+ </header>
 
-  <nav>
-    <button class="secondary" data-tab="home">Home</button>
-    <button class="secondary" data-tab="sales">Sales</button>
-    <button class="secondary" data-tab="stock">Stocks</button>
-    <button class="secondary" data-tab="reports">Reports</button>
-    <button class="secondary owner-only" data-tab="settings">Settings</button>
-  </nav>
+ <nav>
+  <button data-tab="home">Home</button>
+  <button data-tab="sales">Sales</button>
+  <button data-tab="stock">Stocks</button>
+  <button data-tab="reports">Reports</button>
+  <button data-tab="settings" id="settingsButton">Settings</button>
+ </nav>
 
-  <main>
-    <section id="home" class="tab active">
-      <h2>Dashboard</h2>
-      <div class="grid">
-        <div class="stat">Today's Sales<strong id="dashSales">₱0.00</strong></div>
-        <div class="stat">Products<strong id="dashProducts">0</strong></div>
-        <div class="stat">Transactions<strong id="dashCount">0</strong></div>
-      </div>
-      <div class="card">
-        <h3>QuickMart Store</h3>
-        <p>Manage sales, inventory, and daily reports.</p>
-        <p class="small">Ang data ay naka-save sa browser ng device na ito.</p>
-      </div>
-    </section>
+ <main>
+  <section id="home" class="tab">
+   <div class="card">
+    <h2>Dashboard</h2>
+    <p>Total Sales Today: <strong id="todaySales">₱0.00</strong></p>
+    <p>Products in Inventory: <strong id="productCount">0</strong></p>
+    <p>Items Sold Today: <strong id="itemsSold">0</strong></p>
+   </div>
+  </section>
 
-    <section id="sales" class="tab">
-      <h2>Sales / Kaha</h2>
-      <div class="card">
-        <label>Product</label>
-        <select id="saleProduct"></select>
-        <label>Quantity</label>
-        <input id="saleQty" type="number" min="0.001" step="0.001" value="1">
-        <label>Payment Method</label>
-        <select id="payment">
-          <option>Cash</option>
-          <option>GCash</option>
-          <option>PayMaya</option>
-          <option>QRPH</option>
-          <option>ATM / Card</option>
-        </select>
-        <label>Amount Received (₱)</label>
-        <input id="received" type="number" min="0" step="0.01" value="0">
-        <div class="row">
-          <strong>Total: <span id="saleTotal">₱0.00</span></strong>
-          <button class="primary" id="completeSale">COMPLETE SALE</button>
-        </div>
-        <p id="changeDue"></p>
-        <p class="small">Demo only: ang utang, discounts at refunds ay hindi pa kasama.</p>
-      </div>
-      <div class="card">
-        <h3>Recent Sales</h3>
-        <div class="table-wrap"><table>
-          <thead><tr><th>Date</th><th>Product</th><th>Qty</th><th>Total</th></tr></thead>
-          <tbody id="salesRows"></tbody>
-        </table></div>
-      </div>
-    </section>
+  <section id="sales" class="tab hidden">
+   <div class="card">
+    <h2>Record Sale</h2>
+    <label>Product</label>
+    <select id="saleProduct"></select>
+    <label>Quantity</label>
+    <input id="saleQty" type="number" min="0.001" step="any" value="1">
+    <label>Payment Method</label>
+    <select id="payment">
+     <option>Cash</option>
+     <option>GCash</option>
+     <option>PayMaya</option>
+     <option>QRPH</option>
+     <option>Card</option>
+    </select>
+    <button id="sellBtn">RECORD SALE</button>
+    <p id="saleMessage"></p>
+   </div>
+  </section>
 
-    <section id="stock" class="tab">
-      <h2>Inventory / Stocks</h2>
-      <div class="card owner-only">
-        <h3>Add Product</h3>
-        <label>Product Name</label>
-        <input id="productName" placeholder="Hal. Dressed Chicken">
-        <label>Unit</label>
-        <select id="productUnit">
-          <option value="pcs">Pieces (pcs)</option>
-          <option value="kg">Kilograms (kg)</option>
-        </select>
-        <label>Selling Price (₱ per unit)</label>
-        <input id="productPrice" type="number" min="0" step="0.01">
-        <label>Cost Price (₱ per unit)</label>
-        <input id="productCost" type="number" min="0" step="0.01">
-        <label>Beginning / Current Stock</label>
-        <input id="productQty" type="number" min="0" step="0.001">
-        <button class="primary" id="addProduct">ADD PRODUCT</button>
-      </div>
-      <div class="card">
-        <div class="table-wrap"><table>
-          <thead><tr><th>Product</th><th>Unit</th><th>Price</th><th>Stock</th></tr></thead>
-          <tbody id="stockRows"></tbody>
-        </table></div>
-      </div>
-    </section>
+  <section id="stock" class="tab hidden">
+   <div class="card">
+    <h2>Inventory / Stocks</h2>
+    <label>Product Name</label>
+    <input id="pName" placeholder="Hal. Dressed Chicken">
+    <label>Unit</label>
+    <select id="pUnit">
+     <option value="kg">Kilo (kg)</option>
+     <option value="pcs">Piraso (pcs)</option>
+    </select>
+    <label>Selling Price per Unit (₱)</label>
+    <input id="pPrice" type="number" min="0" step="0.01">
+    <label>Starting Stock</label>
+    <input id="pQty" type="number" min="0" step="any">
+    <button id="addProduct">ADD PRODUCT</button>
+    <hr>
+    <h3>Current Stocks</h3>
+    <div id="stockList"></div>
+   </div>
+  </section>
 
-    <section id="reports" class="tab">
-      <h2>Daily Reports</h2>
-      <div class="grid">
-        <div class="stat">Sales<strong id="reportSales">₱0.00</strong></div>
-        <div class="stat">Estimated Profit<strong id="reportProfit">₱0.00</strong></div>
-        <div class="stat">Transactions<strong id="reportCount">0</strong></div>
-      </div>
-      <div class="card">
-        <p>Daily sales total and estimated product profit.</p>
-        <button class="primary" id="zReading">END DAY / Z-READING</button>
-        <button class="secondary" onclick="window.print()">PRINT REPORT</button>
-        <pre id="zResult" style="white-space:pre-wrap"></pre>
-        <p class="small">Panimulang report lamang; hindi pa ito opisyal na BIR-compliant Z-reading.</p>
-      </div>
-    </section>
+  <section id="reports" class="tab hidden">
+   <div class="card">
+    <h2>Sales Report</h2>
+    <p>Total Recorded Sales: <strong id="reportSales">₱0.00</strong></p>
+    <p>Total Items Sold: <strong id="reportQty">0</strong></p>
+    <div id="reportList"></div>
+    <button id="exportBtn" class="secondary">DOWNLOAD SALES CSV</button>
+   </div>
+  </section>
 
-    <section id="settings" class="tab">
-      <h2>Owner Settings</h2>
-      <div class="card">
-        <h3>Store Appearance</h3>
-        <label>Store Name</label>
-        <input id="storeName" maxlength="60">
-        <label>Font</label>
-        <select id="fontChoice">
-          <option value="Arial, sans-serif">Arial</option>
-          <option value="Verdana, sans-serif">Verdana</option>
-          <option value="Georgia, serif">Georgia</option>
-          <option value="'Trebuchet MS', sans-serif">Trebuchet</option>
-        </select>
-        <button class="primary" id="saveAppearance">SAVE APPEARANCE</button>
-      </div>
-      <div class="card">
-        <h3>Cashier Password</h3>
-        <p>Owner lamang ang maaaring magpalit ng cashier password.</p>
-        <label>New Cashier Password</label>
-        <input id="newCashierPass" type="password" minlength="8"
-          autocomplete="new-password">
-        <button class="primary" id="changeCashierPass">CHANGE CASHIER PASSWORD</button>
-      </div>
-      <div class="card">
-        <h3>Backup</h3>
-        <button class="secondary
+  <section id="settings" class="tab hidden">
+   <div class="card">
+    <h2>Store Settings</h2>
+    <label>Store Name</label>
+    <input id="storeName" value="QUICKMart Store">
+    <button id="saveSettings">SAVE STORE NAME</button>
+    <p class="small">Demo version: data is saved in this browser on this device.</p>
+   </div>
+  </section>
+ </main>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+const $ = id => document.getElementById(id);
+const money = n => "₱" + Number(n || 0).toLocaleString("en-PH", {
+ minimumFractionDigits:2, maximumFractionDigits:2
+});
+
+let user = null;
+let products = JSON.parse(localStorage.getItem("qm_products") || "null");
+let sales = JSON.parse(localStorage.getItem("qm_sales") || "[]");
+let store = localStorage.getItem("qm_store") || "QUICKMart Store";
+
+if(!Array.isArray(products)){
+ products = [
+  {id:1,name:"Dressed Chicken",unit:"kg",price:220,qty:0},
+  {id:2,name:"Hotdog",unit:"pcs",price:15,qty:0}
+ ];
+ saveProducts();
+}
+
+function saveProducts(){
+ localStorage.setItem("qm_products",JSON.stringify(products));
+}
+function saveSales(){
+ localStorage.setItem("qm_sales",JSON.stringify(sales));
+}
+function today(){
+ return new Date().toLocaleDateString("en-CA");
+}
+function showTab(name){
+ document.querySelectorAll(".tab").forEach(el=>el.classList.add("hidden"));
+ $(name).classList.remove("hidden");
+ render();
+}
+function render(){
+ $("headerStore").textContent=store;
+ $("loginStore").textContent=store+" POS";
+ $("storeName").value=store;
+
+ const todays=sales.filter(s=>s.date===today());
+ $("todaySales").textContent=money(todays.reduce((a,s)=>a+s.total,0));
+ $("productCount").textContent=products.length;
+ $("itemsSold").textContent=todays.reduce((a,s)=>a+s.qty,0);
+ $("reportSales").textContent=money(sales.reduce((a,s)=>a+s.total,0));
+ $("reportQty").textContent=sales.reduce((a,s)=>a+s.qty,0);
+
+ $("saleProduct").innerHTML="";
+ products.forEach(p=>{
+  const o=document.createElement("option");
+  o.value=p.id;
+  o.textContent=p.name+" ("+p.unit+") — "+money(p.price);
+  $("saleProduct").appendChild(o);
+ });
+
+ $("stockList").innerHTML="";
+ products.forEach(p=>{
+  const row=document.createElement("p");
+  row.textContent=p.name+" — Stock: "+p.qty+" "+p.unit+" — Price: "+money(p.price);
+  $("stockList").appendChild(row);
+ });
+
+ $("reportList").innerHTML="";
+ sales.slice().reverse().forEach(s=>{
+  const row=document.createElement("p");
+  row.textContent=s.date+" | "+s.name+" | "+s.qty+" "+s.unit+" | "+money(s.total)+" | "+s.payment;
+  $("reportList").appendChild(row);
+ });
+}
+
+$("loginForm").addEventListener("submit",function(e){
+ e.preventDefault();
+ const u=$("username").value.trim();
+ const p=$("password").value;
+ if(u==="owner" && p==="QMowner123!"){
+  user="Owner";
+ }else if(u==="cashier" && p==="cashier123"){
+  user="Cashier";
+ }else{
+  $("loginError").textContent="Mali ang username o password.";
+  return;
+ }
+ $("loginError").textContent="";
+ $("loginPage").classList.add("hidden");
+ $("app").classList.remove("hidden");
+ $("welcome").textContent="Logged in as: "+user;
+ $("settingsButton").classList.toggle("hidden",user!=="Owner");
+ showTab("home");
+});
+
+$("logoutBtn").addEventListener("click",function(){
+ user=null;
+ $("app").classList.add("hidden");
+ $("loginPage").classList.remove("hidden");
+ $("password").value="";
+});
+
+document.querySelectorAll("[data-tab]").forEach(btn=>{
+ btn.addEventListener("click",function(){
+  if(this.dataset.tab==="settings" && user!=="Owner") return;
+  showTab(this.dataset.tab);
+ });
+});
+
+$("addProduct").addEventListener("click",function(){
+ if(user!=="Owner"){alert("Owner lang ang maaaring magdagdag ng produkto.");return;}
+ const name=$("pName").value.trim();
+ const unit=$("pUnit").value;
+ const price=Number($("pPrice").value);
+ const qty=Number($("pQty").value);
+ if(!name || $("pPrice").value==="" || $("pQty").value==="" ||
+    !Number.isFinite(price) || !Number.isFinite(qty) || price<0 || qty<0){
+  alert("Pakilagyan nang tama ang lahat ng detalye.");return;
+ }
+ products.push({id:Date.now(),name,unit,price,qty});
+ saveProducts();
+ $("pName").value="";$("pPrice").value="";$("pQty").value="";
+ render();
+ alert("Naidagdag ang produkto.");
+});
+
+$("sellBtn").addEventListener("click",function(){
+ const product=products.find(p=>p.id===Number($("saleProduct").value));
+ const qty=Number($("saleQty").value);
+ if(!product || !Number.isFinite(qty) || qty<=0){
+  $("saleMessage").textContent="Pakisuri ang produkto at quantity.";
+  return;
+ }
+ if(product.qty<qty){
+  $("saleMessage").textContent="Kulang ang stock. Ayusin muna ang inventory.";
+  return;
+ }
+ product.qty=Number((product.qty-qty).toFixed(3));
+ const total=Number((product.price*qty).toFixed(2));
+ sales.push({
+  date:today(),name:product.name,unit:product.unit,
+  qty:qty,total:total,payment:$("payment").value
+ });
+ saveProducts();saveSales();render();
+ $("saleMessage").textContent="Na-record ang sale: "+money(total);
+});
+
+$("saveSettings").addEventListener("click",function(){
+ if(user!=="Owner"){alert("Owner lang ang puwedeng magbago ng settings.");return;}
+ const name=$("storeName").value.trim();
+ if(!name){alert("Ilagay ang store name.");return;}
+ store=name;
+ localStorage.setItem("qm_store",store);
+ render();
+ alert("Na-save ang store name.");
+});
+
+$("exportBtn").addEventListener("click",function(){
+ const rows=[["Date","Product","Quantity","Unit","Total","Payment"]];
+ sales.forEach(s=>rows.push([s.date,s.name,s.qty,s.unit,s.total,s.payment]));
+ const csv=rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n");
+ const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;a.download="quickmart-sales.csv";a.click();
+ URL.revokeObjectURL(url);
+});
+
+render();
+})();
+</script>
+</body>
+</html>
