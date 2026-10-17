@@ -2,142 +2,281 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#087443">
 <title>QUICKMart POS</title>
 <style>
-body{font-family:Arial,sans-serif;margin:0;background:#f2f4f7;color:#222}
-header{background:#087b43;color:white;padding:18px;text-align:center}
-main{padding:14px;max-width:650px;margin:auto}
-.card{background:white;padding:15px;margin:12px 0;border-radius:10px}
-input,select,button{box-sizing:border-box;width:100%;padding:12px;margin:6px 0;border-radius:6px;border:1px solid #ccc;font-size:16px}
-button{background:#087b43;color:white;border:0;font-weight:bold}
-table{width:100%;border-collapse:collapse}
-td,th{padding:8px;border-bottom:1px solid #ddd;text-align:left}
-.small{font-size:13px;color:#666}
+:root {
+  --green: #087443;
+  --light: #eaf7ef;
+  --white: #fff;
+  --text: #19352a;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f6f3;
+  color: var(--text);
+}
+button, input, select { font: inherit; }
+button {
+  border: 0;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.primary { background: var(--green); color: white; }
+.secondary { background: #e1f0e6; color: var(--green); }
+.danger { background: #b42318; color: white; }
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0 12px;
+  border: 1px solid #ccd9d0;
+  border-radius: 8px;
+  background: white;
+}
+label { font-weight: bold; font-size: 14px; }
+h1, h2, h3 { margin-top: 0; }
+.brand { color: var(--green); font-weight: 900; }
+.tagline { color: #60776a; font-style: italic; }
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 18px;
+  margin: 12px 0;
+  box-shadow: 0 2px 9px #0000000b;
+}
+#loginPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+.login-card {
+  background: white;
+  width: 100%;
+  max-width: 390px;
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: 0 8px 30px #00000012;
+}
+.center { text-align: center; }
+#app { display: none; }
+header {
+  background: var(--green);
+  color: white;
+  padding: 18px;
+}
+header h2 { margin: 0 0 4px; }
+header .tagline { color: #e1f7e9; }
+nav {
+  display: flex;
+  gap: 7px;
+  padding: 10px;
+  overflow-x: auto;
+  background: white;
+  position: sticky;
+  top: 0;
+}
+nav button { white-space: nowrap; }
+main { padding: 12px; max-width: 1000px; margin: auto; }
+.tab { display: none; }
+.tab.active { display: block; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+  gap: 10px;
+}
+.stat {
+  background: var(--light);
+  padding: 15px;
+  border-radius: 12px;
+}
+.stat strong { display: block; font-size: 22px; margin-top: 8px; }
+table { width: 100%; border-collapse: collapse; }
+th, td {
+  text-align: left;
+  padding: 9px 5px;
+  border-bottom: 1px solid #e5ece7;
+  font-size: 13px;
+}
+.table-wrap { overflow-x: auto; }
+.small { font-size: 12px; color: #66776d; }
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+footer { text-align: center; padding: 20px; color: #75857b; }
+@media print {
+  nav, button, #settings, #loginPage { display: none !important; }
+  body { background: white; }
+}
 </style>
 </head>
 <body>
-<header>
-<h2 id="title">QUICKMart POS</h2>
-<p>Sales • Inventory • Daily Report</p>
-</header>
-<main>
-<div class="card">
-<h3>Store Settings</h3>
-<input id="store" placeholder="Store name">
-<button onclick="saveStore()">Save Store Name</button>
-</div>
 
-<div class="card">
-<h3>Add Product</h3>
-<input id="name" placeholder="Product name">
-<select id="unit">
-<option value="pcs">PCS / Each</option>
-<option value="kg">KG</option>
-</select>
-<input id="price" type="number" min="0" step="0.01" placeholder="Selling price">
-<input id="cost" type="number" min="0" step="0.01" placeholder="Cost per unit">
-<input id="stock" type="number" min="0" step="0.001" placeholder="Beginning stock">
-<button onclick="addProduct()">Add Product</button>
-</div>
+<section id="loginPage">
+  <div class="login-card center">
+    <h1 class="brand" id="loginStore">QUICKMart POS</h1>
+    <p class="tagline">Your Needs, Our Priority.</p>
+    <hr>
+    <h3>Welcome!</h3>
+    <p>Mag-login upang magpatuloy.</p>
+    <form id="loginForm">
+      <label for="username">Username</label>
+      <input id="username" autocomplete="username" required>
+      <label for="password">Password</label>
+      <input id="password" type="password"
+        autocomplete="current-password" required>
+      <button class="primary" style="width:100%" type="submit">
+        LOGIN
+      </button>
+    </form>
+    <p id="loginError" style="color:#b42318"></p>
+    <p class="small">QUICKMart POS · Offline starter version</p>
+  </div>
+</section>
 
-<div class="card">
-<h3>Inventory</h3>
-<div id="inventory"></div>
-</div>
+<div id="app">
+  <header>
+    <div class="row">
+      <div>
+        <h2 id="headerStore">QUICKMart Store</h2>
+        <div class="tagline">Your Needs, Our Priority.</div>
+      </div>
+      <button id="logoutBtn">LOGOUT</button>
+    </div>
+    <p id="welcome" style="margin-bottom:0"></p>
+  </header>
 
-<div class="card">
-<h3>Record Sale</h3>
-<select id="product"></select>
-<input id="qty" type="number" min="0.001" step="0.001" placeholder="Quantity sold">
-<select id="payment">
-<option>Cash</option>
-<option>GCash</option>
-<option>PayMaya</option>
-<option>QRPH</option>
-<option>Card</option>
-<option>Utang - Not Yet Paid</option>
-</select>
-<button onclick="sell()">Record Sale</button>
-<div id="receipt"></div>
-</div>
+  <nav>
+    <button class="secondary" data-tab="home">Home</button>
+    <button class="secondary" data-tab="sales">Sales</button>
+    <button class="secondary" data-tab="stock">Stocks</button>
+    <button class="secondary" data-tab="reports">Reports</button>
+    <button class="secondary owner-only" data-tab="settings">Settings</button>
+  </nav>
 
-<div class="card">
-<h3>Daily Sales Report</h3>
-<div id="report"></div>
-<button onclick="endDay()">End Day / Z-Reading</button>
-</div>
-<p class="small">Demo version: data is saved in this browser on this device. Back up your records regularly.</p>
-</main>
+  <main>
+    <section id="home" class="tab active">
+      <h2>Dashboard</h2>
+      <div class="grid">
+        <div class="stat">Today's Sales<strong id="dashSales">₱0.00</strong></div>
+        <div class="stat">Products<strong id="dashProducts">0</strong></div>
+        <div class="stat">Transactions<strong id="dashCount">0</strong></div>
+      </div>
+      <div class="card">
+        <h3>QuickMart Store</h3>
+        <p>Manage sales, inventory, and daily reports.</p>
+        <p class="small">Ang data ay naka-save sa browser ng device na ito.</p>
+      </div>
+    </section>
 
-<script>
-let products=JSON.parse(localStorage.getItem("qm_products")||"[]");
-let sales=JSON.parse(localStorage.getItem("qm_sales")||"[]");
-let store=localStorage.getItem("qm_store")||"QUICKMart POS";
+    <section id="sales" class="tab">
+      <h2>Sales / Kaha</h2>
+      <div class="card">
+        <label>Product</label>
+        <select id="saleProduct"></select>
+        <label>Quantity</label>
+        <input id="saleQty" type="number" min="0.001" step="0.001" value="1">
+        <label>Payment Method</label>
+        <select id="payment">
+          <option>Cash</option>
+          <option>GCash</option>
+          <option>PayMaya</option>
+          <option>QRPH</option>
+          <option>ATM / Card</option>
+        </select>
+        <label>Amount Received (₱)</label>
+        <input id="received" type="number" min="0" step="0.01" value="0">
+        <div class="row">
+          <strong>Total: <span id="saleTotal">₱0.00</span></strong>
+          <button class="primary" id="completeSale">COMPLETE SALE</button>
+        </div>
+        <p id="changeDue"></p>
+        <p class="small">Demo only: ang utang, discounts at refunds ay hindi pa kasama.</p>
+      </div>
+      <div class="card">
+        <h3>Recent Sales</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Date</th><th>Product</th><th>Qty</th><th>Total</th></tr></thead>
+          <tbody id="salesRows"></tbody>
+        </table></div>
+      </div>
+    </section>
 
-function save(){
- localStorage.setItem("qm_products",JSON.stringify(products));
- localStorage.setItem("qm_sales",JSON.stringify(sales));
-}
-function saveStore(){
- store=document.getElementById("store").value.trim()||"QUICKMart POS";
- localStorage.setItem("qm_store",store);
- render();
-}
-function addProduct(){
- let name=document.getElementById("name").value.trim();
- let unit=document.getElementById("unit").value;
- let price=Number(document.getElementById("price").value);
- let cost=Number(document.getElementById("cost").value);
- let stock=Number(document.getElementById("stock").value);
- if(!name||document.getElementById("price").value===""||
- document.getElementById("cost").value===""||
- document.getElementById("stock").value===""||
- price<0||cost<0||stock<0){
- alert("Please enter valid product details.");return;
- }
- products.push({id:Date.now(),name,unit,price,cost,stock});
- save();render();
- document.getElementById("name").value="";
- document.getElementById("price").value="";
- document.getElementById("cost").value="";
- document.getElementById("stock").value="";
- alert("Product added!");
-}
-function sell(){
- let id=Number(document.getElementById("product").value);
- let p=products.find(x=>x.id===id);
- let q=Number(document.getElementById("qty").value);
- let payment=document.getElementById("payment").value;
- if(!p||!Number.isFinite(q)||q<=0){alert("Choose a product and enter quantity.");return;}
- if(payment!=="Utang - Not Yet Paid"&&q>p.stock){
- alert("Not enough stock.");return;
- }
- if(payment!=="Utang - Not Yet Paid")p.stock-=q;
- let total=q*p.price;
- sales.push({name:p.name,unit:p.unit,qty:q,total,cost:q*p.cost,payment,date:new Date().toLocaleString()});
- save();render();
- document.getElementById("qty").value="";
- document.getElementById("receipt").innerHTML=
- "<h4>Sale recorded</h4>"+p.name+" — "+q+" "+p.unit+
- "<br>Total: ₱"+total.toFixed(2)+"<br>Payment: "+payment;
-}
-function endDay(){
- let total=sales.reduce((a,s)=>a+s.total,0);
- let cost=sales.reduce((a,s)=>a+s.cost,0);
- alert("Z-READING\nStore: "+store+"\nTransactions: "+sales.length+
- "\nSales: ₱"+total.toFixed(2)+"\nEstimated profit: ₱"+(total-cost).toFixed(2));
-}
-function render(){
- document.getElementById("title").textContent=store;
- document.getElementById("store").value=store;
- document.getElementById("inventory").innerHTML=products.length?
- "<table><tr><th>Product</th><th>Stock</th><th>Price</th></tr>"+
- products.map(p=>"<tr><td>"+escapeHTML(p.name)+" ("+p.unit+")</td><td>"+p.stock+
- "</td><td>₱"+p.price.toFixed(2)+"</td></tr>").join("")+"</table>":"No products yet.";
- document.getElementById("product").innerHTML=products.map(p=>
- "<option value='"+p.id+"'>"+escapeHTML(p.name)+" ("+p.unit+") — ₱"+p.price+"</option>").join("");
- let total=sales.reduce((a,s)=>a+s.total,0);
- let paid=sales.filter(s=>s.payment!=="Utang - Not Yet Paid").reduce((a,s)=>a+s.total,0);
- let cost=sales.reduce((a,s)=>a+s.cost,0);
- document.getElementById("report
+    <section id="stock" class="tab">
+      <h2>Inventory / Stocks</h2>
+      <div class="card owner-only">
+        <h3>Add Product</h3>
+        <label>Product Name</label>
+        <input id="productName" placeholder="Hal. Dressed Chicken">
+        <label>Unit</label>
+        <select id="productUnit">
+          <option value="pcs">Pieces (pcs)</option>
+          <option value="kg">Kilograms (kg)</option>
+        </select>
+        <label>Selling Price (₱ per unit)</label>
+        <input id="productPrice" type="number" min="0" step="0.01">
+        <label>Cost Price (₱ per unit)</label>
+        <input id="productCost" type="number" min="0" step="0.01">
+        <label>Beginning / Current Stock</label>
+        <input id="productQty" type="number" min="0" step="0.001">
+        <button class="primary" id="addProduct">ADD PRODUCT</button>
+      </div>
+      <div class="card">
+        <div class="table-wrap"><table>
+          <thead><tr><th>Product</th><th>Unit</th><th>Price</th><th>Stock</th></tr></thead>
+          <tbody id="stockRows"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <section id="reports" class="tab">
+      <h2>Daily Reports</h2>
+      <div class="grid">
+        <div class="stat">Sales<strong id="reportSales">₱0.00</strong></div>
+        <div class="stat">Estimated Profit<strong id="reportProfit">₱0.00</strong></div>
+        <div class="stat">Transactions<strong id="reportCount">0</strong></div>
+      </div>
+      <div class="card">
+        <p>Daily sales total and estimated product profit.</p>
+        <button class="primary" id="zReading">END DAY / Z-READING</button>
+        <button class="secondary" onclick="window.print()">PRINT REPORT</button>
+        <pre id="zResult" style="white-space:pre-wrap"></pre>
+        <p class="small">Panimulang report lamang; hindi pa ito opisyal na BIR-compliant Z-reading.</p>
+      </div>
+    </section>
+
+    <section id="settings" class="tab">
+      <h2>Owner Settings</h2>
+      <div class="card">
+        <h3>Store Appearance</h3>
+        <label>Store Name</label>
+        <input id="storeName" maxlength="60">
+        <label>Font</label>
+        <select id="fontChoice">
+          <option value="Arial, sans-serif">Arial</option>
+          <option value="Verdana, sans-serif">Verdana</option>
+          <option value="Georgia, serif">Georgia</option>
+          <option value="'Trebuchet MS', sans-serif">Trebuchet</option>
+        </select>
+        <button class="primary" id="saveAppearance">SAVE APPEARANCE</button>
+      </div>
+      <div class="card">
+        <h3>Cashier Password</h3>
+        <p>Owner lamang ang maaaring magpalit ng cashier password.</p>
+        <label>New Cashier Password</label>
+        <input id="newCashierPass" type="password" minlength="8"
+          autocomplete="new-password">
+        <button class="primary" id="changeCashierPass">CHANGE CASHIER PASSWORD</button>
+      </div>
+      <div class="card">
+        <h3>Backup</h3>
+        <button class="secondary
