@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QUICKMart POS</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#f2f4f7;color:#222}
+header{background:#087b43;color:white;padding:18px;text-align:center}
+main{padding:14px;max-width:650px;margin:auto}
+.card{background:white;padding:15px;margin:12px 0;border-radius:10px}
+input,select,button{box-sizing:border-box;width:100%;padding:12px;margin:6px 0;border-radius:6px;border:1px solid #ccc;font-size:16px}
+button{background:#087b43;color:white;border:0;font-weight:bold}
+table{width:100%;border-collapse:collapse}
+td,th{padding:8px;border-bottom:1px solid #ddd;text-align:left}
+.small{font-size:13px;color:#666}
+</style>
+</head>
+<body>
+<header>
+<h2 id="title">QUICKMart POS</h2>
+<p>Sales • Inventory • Daily Report</p>
+</header>
+<main>
+<div class="card">
+<h3>Store Settings</h3>
+<input id="store" placeholder="Store name">
+<button onclick="saveStore()">Save Store Name</button>
+</div>
+
+<div class="card">
+<h3>Add Product</h3>
+<input id="name" placeholder="Product name">
+<select id="unit">
+<option value="pcs">PCS / Each</option>
+<option value="kg">KG</option>
+</select>
+<input id="price" type="number" min="0" step="0.01" placeholder="Selling price">
+<input id="cost" type="number" min="0" step="0.01" placeholder="Cost per unit">
+<input id="stock" type="number" min="0" step="0.001" placeholder="Beginning stock">
+<button onclick="addProduct()">Add Product</button>
+</div>
+
+<div class="card">
+<h3>Inventory</h3>
+<div id="inventory"></div>
+</div>
+
+<div class="card">
+<h3>Record Sale</h3>
+<select id="product"></select>
+<input id="qty" type="number" min="0.001" step="0.001" placeholder="Quantity sold">
+<select id="payment">
+<option>Cash</option>
+<option>GCash</option>
+<option>PayMaya</option>
+<option>QRPH</option>
+<option>Card</option>
+<option>Utang - Not Yet Paid</option>
+</select>
+<button onclick="sell()">Record Sale</button>
+<div id="receipt"></div>
+</div>
+
+<div class="card">
+<h3>Daily Sales Report</h3>
+<div id="report"></div>
+<button onclick="endDay()">End Day / Z-Reading</button>
+</div>
+<p class="small">Demo version: data is saved in this browser on this device. Back up your records regularly.</p>
+</main>
+
+<script>
+let products=JSON.parse(localStorage.getItem("qm_products")||"[]");
+let sales=JSON.parse(localStorage.getItem("qm_sales")||"[]");
+let store=localStorage.getItem("qm_store")||"QUICKMart POS";
+
+function save(){
+ localStorage.setItem("qm_products",JSON.stringify(products));
+ localStorage.setItem("qm_sales",JSON.stringify(sales));
+}
+function saveStore(){
+ store=document.getElementById("store").value.trim()||"QUICKMart POS";
+ localStorage.setItem("qm_store",store);
+ render();
+}
+function addProduct(){
+ let name=document.getElementById("name").value.trim();
+ let unit=document.getElementById("unit").value;
+ let price=Number(document.getElementById("price").value);
+ let cost=Number(document.getElementById("cost").value);
+ let stock=Number(document.getElementById("stock").value);
+ if(!name||document.getElementById("price").value===""||
+ document.getElementById("cost").value===""||
+ document.getElementById("stock").value===""||
+ price<0||cost<0||stock<0){
+ alert("Please enter valid product details.");return;
+ }
+ products.push({id:Date.now(),name,unit,price,cost,stock});
+ save();render();
+ document.getElementById("name").value="";
+ document.getElementById("price").value="";
+ document.getElementById("cost").value="";
+ document.getElementById("stock").value="";
+ alert("Product added!");
+}
+function sell(){
+ let id=Number(document.getElementById("product").value);
+ let p=products.find(x=>x.id===id);
+ let q=Number(document.getElementById("qty").value);
+ let payment=document.getElementById("payment").value;
+ if(!p||!Number.isFinite(q)||q<=0){alert("Choose a product and enter quantity.");return;}
+ if(payment!=="Utang - Not Yet Paid"&&q>p.stock){
+ alert("Not enough stock.");return;
+ }
+ if(payment!=="Utang - Not Yet Paid")p.stock-=q;
+ let total=q*p.price;
+ sales.push({name:p.name,unit:p.unit,qty:q,total,cost:q*p.cost,payment,date:new Date().toLocaleString()});
+ save();render();
+ document.getElementById("qty").value="";
+ document.getElementById("receipt").innerHTML=
+ "<h4>Sale recorded</h4>"+p.name+" — "+q+" "+p.unit+
+ "<br>Total: ₱"+total.toFixed(2)+"<br>Payment: "+payment;
+}
+function endDay(){
+ let total=sales.reduce((a,s)=>a+s.total,0);
+ let cost=sales.reduce((a,s)=>a+s.cost,0);
+ alert("Z-READING\nStore: "+store+"\nTransactions: "+sales.length+
+ "\nSales: ₱"+total.toFixed(2)+"\nEstimated profit: ₱"+(total-cost).toFixed(2));
+}
+function render(){
+ document.getElementById("title").textContent=store;
+ document.getElementById("store").value=store;
+ document.getElementById("inventory").innerHTML=products.length?
+ "<table><tr><th>Product</th><th>Stock</th><th>Price</th></tr>"+
+ products.map(p=>"<tr><td>"+escapeHTML(p.name)+" ("+p.unit+")</td><td>"+p.stock+
+ "</td><td>₱"+p.price.toFixed(2)+"</td></tr>").join("")+"</table>":"No products yet.";
+ document.getElementById("product").innerHTML=products.map(p=>
+ "<option value='"+p.id+"'>"+escapeHTML(p.name)+" ("+p.unit+") — ₱"+p.price+"</option>").join("");
+ let total=sales.reduce((a,s)=>a+s.total,0);
+ let paid=sales.filter(s=>s.payment!=="Utang - Not Yet Paid").reduce((a,s)=>a+s.total,0);
+ let cost=sales.reduce((a,s)=>a+s.cost,0);
+ document.getElementById("report
