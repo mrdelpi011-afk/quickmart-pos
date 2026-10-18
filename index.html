@@ -4,34 +4,39 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>QUICKMart POS</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f1f5f9;color:#172033}
+body{margin:0;background:#f1f5f9;color:#172033;font-family:Arial,sans-serif}
 header{background:linear-gradient(135deg,#064e3b,#16a34a);color:white;padding:22px 16px}
-header h1{margin:0;font-size:26px}
-header p{margin:7px 0 0}
-main{max-width:950px;margin:auto;padding:14px}
+header h1{margin:0;font-size:27px}
+header p{margin:6px 0 0}
+main{max-width:1000px;margin:auto;padding:14px}
 .card{background:white;padding:16px;border-radius:14px;margin-bottom:14px;box-shadow:0 3px 12px #0000000d}
 h2{font-size:19px;margin-top:0}
-input,select,button{width:100%;padding:12px;margin:5px 0;border-radius:8px;border:1px solid #cbd5e1;font-size:15px}
+input,select,button{width:100%;padding:12px;margin:5px 0;border:1px solid #cbd5e1;border-radius:8px;font-size:15px}
 button{background:#15803d;color:white;border:0;font-weight:bold;cursor:pointer}
 button.secondary{background:#334155}
 button.danger{background:#b91c1c}
+nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:14px}
+nav button{padding:11px 3px;font-size:13px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.stat{background:#ecfdf5;border-radius:10px;padding:13px}
+.stat{background:#ecfdf5;padding:13px;border-radius:10px}
 .stat strong{display:block;font-size:20px;margin-top:6px}
-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:14px}
-nav button{font-size:13px;padding:11px 4px}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{text-align:left;padding:9px 5px;border-bottom:1px solid #e2e8f0}
+th,td{text-align:left;padding:8px 5px;border-bottom:1px solid #e2e8f0}
+.tablewrap{overflow-x:auto}
 .small{font-size:12px;color:#64748b}
-.hidden{display:none}
+.hidden{display:none!important}
 #login{max-width:420px;margin:35px auto}
 footer{text-align:center;padding:20px;color:#64748b;font-size:12px}
-@media(max-width:400px){.grid{grid-template-columns:1fr}header h1{font-size:23px}}
+.badge{display:inline-block;background:#dcfce7;color:#166534;padding:4px 7px;border-radius:6px}
+@media(max-width:400px){nav button{font-size:11px}.grid{grid-template-columns:1fr}header h1{font-size:23px}}
+@media print{nav,button,#login,header p{display:none!important}body{background:white}.card{box-shadow:none}}
 </style>
 </head>
+
 <body>
 <header>
 <h1 id="storeTitle">QUICKMart POS</h1>
@@ -39,18 +44,20 @@ footer{text-align:center;padding:20px;color:#64748b;font-size:12px}
 </header>
 
 <main>
+
 <section id="login" class="card">
 <h2>🔐 Admin Login</h2>
-<p class="small">Unang prototype: lokal na demo login lamang.</p>
-<label>Email / Username</label>
+<p class="small">Demo login lamang ang nasa prototype na ito.</p>
+<label>Admin email / username</label>
 <input id="username" type="email" placeholder="Ilagay ang admin email">
 <label>Password</label>
-<input id="password" type="password" placeholder="Gumawa ng demo password">
+<input id="password" type="password" placeholder="Ilagay ang password">
 <button onclick="login()">Login</button>
-<p class="small">Demo lamang ito. Hindi ligtas na authentication ang login na ito.</p>
+<p class="small">Ang prototype login ay hindi pa secure na online authentication.</p>
 </section>
 
 <section id="app" class="hidden">
+
 <nav>
 <button onclick="show('dashboard')">Dashboard</button>
 <button onclick="show('sales')">Sales</button>
@@ -62,160 +69,519 @@ footer{text-align:center;padding:20px;color:#64748b;font-size:12px}
 
 <section id="dashboard" class="page">
 <div class="card">
-<h2>📊 Dashboard</h2>
+<h2>📊 Dashboard Today</h2>
 <div class="stats">
-<div class="stat">Today's Sales<strong id="totalSales">₱0.00</strong></div>
+<div class="stat">Total Sales<strong id="totalSales">₱0.00</strong></div>
 <div class="stat">Expenses<strong id="totalExpenses">₱0.00</strong></div>
-<div class="stat">Estimated Profit<strong id="profit">₱0.00</strong></div>
-<div class="stat">Products<strong id="productCount">0</strong></div>
+<div class="stat">Estimated Net Profit<strong id="netProfit">₱0.00</strong></div>
+<div class="stat">Total Products<strong id="productCount">0</strong></div>
 </div>
+</div>
+<div class="card">
+<h2>📦 Low Stock</h2>
+<div id="lowStock"></div>
+</div>
+</section>
+
+<section id="inventory" class="page hidden">
+<div class="card">
+<h2>➕ Add New Product</h2>
+
+<label>Product Name</label>
+<input id="pname" placeholder="Hal. Dressed Chicken">
+
+<label>Category</label>
+<select id="pcategory"></select>
+
+<div class="grid">
+<div>
+<label>Selling Price (₱)</label>
+<input id="price" type="number" min="0" step="0.01" placeholder="SRP">
+</div>
+<div>
+<label>Supplier / Cost Price (₱)</label>
+<input id="cost" type="number" min="0" step="0.01" placeholder="Cost">
+</div>
+</div>
+
+<div class="grid">
+<div>
+<label>Beginning / Current Stock</label>
+<input id="stock" type="number" min="0" step="0.001" placeholder="Quantity">
+</div>
+<div>
+<label>Unit</label>
+<select id="unit">
+<option value="pcs">PCS / Piraso</option>
+<option value="kg">KILO / Kilogram</option>
+</select>
+</div>
+</div>
+
+<button onclick="addProduct()">Save Product</button>
+</div>
+
+<div class="card">
+<h2>📋 Product Inventory</h2>
+<label>Filter by Category</label>
+<select id="inventoryFilter" onchange="renderInventory()"></select>
+<input id="inventorySearch" placeholder="Search product..." oninput="renderInventory()">
+<div class="tablewrap" id="productsTable"></div>
 </div>
 </section>
 
 <section id="sales" class="page hidden">
 <div class="card">
 <h2>🛒 New Sale</h2>
-<label>Product</label><select id="saleProduct"></select>
-<div class="grid">
-<div><label>Quantity</label><input id="saleQty" type="number" min="0.001" step="0.001" value="1"></div>
-<div><label>Unit</label><select id="saleUnit"><option value="pcs">Pcs</option><option value="kg">Kilo</option></select></div>
-</div>
-<label>Payment Method</label>
-<select id="payment"><option>Cash</option><option>GCash</option><option>Maya</option><option>QRPH</option><option>Debit / ATM Card</option><option>Credit Card</option></select>
-<button onclick="makeSale()">Complete Sale</button>
-<p class="small">Demo only: utang, real card processing, and printing need additional setup.</p>
-</div>
-<div class="card"><h2>Recent Sales</h2><div id="salesTable"></div></div>
-</section>
 
-<section id="inventory" class="page hidden">
+<label>Choose Category</label>
+<select id="saleCategory" onchange="updateSaleProducts()"></select>
+
+<label>Choose Product</label>
+<select id="saleProduct" onchange="showSaleInfo()"></select>
+<div id="saleInfo" class="small"></div>
+
+<div class="grid">
+<div>
+<label>Quantity</label>
+<input id="saleQty" type="number" min="0.001" step="0.001" value="1">
+</div>
+<div>
+<label>Unit</label>
+<select id="saleUnit">
+<option value="pcs">PCS</option>
+<option value="kg">KILO</option>
+</select>
+</div>
+</div>
+
+<label>Discount (₱)</label>
+<input id="discount" type="number" min="0" step="0.01" value="0">
+
+<label>Payment Method</label>
+<select id="payment">
+<option>Cash</option>
+<option>GCash</option>
+<option>Maya</option>
+<option>QRPH</option>
+<option>Debit / ATM Card</option>
+<option>Credit Card</option>
+</select>
+
+<label>Cash Received (₱) — para sa Cash lamang</label>
+<input id="cashReceived" type="number" min="0" step="0.01" placeholder="Hal. 500">
+
+<button onclick="makeSale()">Complete Sale</button>
+<div id="saleResult"></div>
+</div>
+
 <div class="card">
-<h2>📦 Add Product</h2>
-<input id="pname" placeholder="Product name">
-<div class="grid">
-<div><label>Selling price (₱)</label><input id="price" type="number" min="0" step="0.01"></div>
-<div><label>Cost price (₱)</label><input id="cost" type="number" min="0" step="0.01"></div>
+<h2>🧾 Today's Transactions</h2>
+<div class="tablewrap" id="salesTable"></div>
+<button class="secondary" onclick="printReceipt()">Print Last Receipt</button>
 </div>
-<div class="grid">
-<div><label>Stock quantity</label><input id="stock" type="number" min="0" step="0.001"></div>
-<div><label>Unit</label><select id="unit"><option value="pcs">Pcs</option><option value="kg">Kilo</option></select></div>
-</div>
-<button onclick="addProduct()">Save Product</button>
-</div>
-<div class="card"><h2>Product List</h2><div id="productsTable"></div></div>
 </section>
 
 <section id="expenses" class="page hidden">
 <div class="card">
-<h2>💸 Add Expense</h2>
-<input id="expenseName" placeholder="Expense description">
-<input id="expenseAmount" type="number" min="0" step="0.01" placeholder="Amount (₱)">
+<h2>💸 Record Expense</h2>
+<label>Expense Description</label>
+<input id="expenseName" placeholder="Hal. Pamasahe, kuryente">
+<label>Amount (₱)</label>
+<input id="expenseAmount" type="number" min="0" step="0.01">
 <button onclick="addExpense()">Save Expense</button>
 </div>
-<div class="card"><h2>Expense List</h2><div id="expensesTable"></div></div>
+<div class="card">
+<h2>Expense Records Today</h2>
+<div id="expensesTable"></div>
+</div>
 </section>
 
 <section id="reports" class="page hidden">
 <div class="card">
-<h2>📈 End-of-Day Report</h2>
-<p>Total sales: <strong id="reportSales">₱0.00</strong></p>
-<p>Estimated gross profit: <strong id="reportProfit">₱0.00</strong></p>
+<h2>📈 Daily Sales & Z-Reading</h2>
+<p>Date: <strong id="reportDate"></strong></p>
+<p>Total Sales: <strong id="reportSales">₱0.00</strong></p>
+<p>Estimated Gross Profit: <strong id="reportGross">₱0.00</strong></p>
 <p>Expenses: <strong id="reportExpenses">₱0.00</strong></p>
-<p>Estimated net profit: <strong id="reportNet">₱0.00</strong></p>
-<button onclick="zReading()">Close Day / Z-Reading</button>
+<p>Estimated Net Profit: <strong id="reportNet">₱0.00</strong></p>
+<p>Transactions: <strong id="transactionCount">0</strong></p>
+<button onclick="zReading()">Print / Close Daily Report</button>
 <div id="zResult"></div>
+<p class="small">Ang prototype ay wala pang automatic next-day beginning balance carry-forward.</p>
 </div>
 </section>
 
 <section id="settings" class="page hidden">
 <div class="card">
 <h2>⚙️ Store Settings</h2>
-<label>Store name</label><input id="newStoreName" placeholder="QUICKMart Store">
-<label>Receipt footer / Owner</label><input id="ownerName" value="Marlon Del Pilar">
-<label>DTI number (optional)</label><input id="dti">
-<label>BIR TIN (optional)</label><input id="tin">
-<label>Font</label><select id="font"><option>Arial</option><option>Verdana</option><option>Tahoma</option><option>Georgia</option></select>
+
+<label>Store Name</label>
+<input id="newStoreName" placeholder="QUICKMart Store">
+
+<label>Receipt Footer / Owner</label>
+<input id="ownerName" placeholder="Marlon Del Pilar">
+
+<label>DTI Registration Number</label>
+<input id="dti" placeholder="Optional">
+
+<label>BIR TIN</label>
+<input id="tin" placeholder="Optional">
+
+<label>Font Style</label>
+<select id="font">
+<option>Arial</option>
+<option>Verdana</option>
+<option>Tahoma</option>
+<option>Georgia</option>
+</select>
+
 <button onclick="saveSettings()">Save Settings</button>
-<button class="secondary" onclick="exportData()">Export Backup (JSON)</button>
+<button class="secondary" onclick="exportData()">Export Backup</button>
 <button class="danger" onclick="logout()">Logout</button>
 </div>
+
+<div class="card">
+<h2>👥 Subscription Information</h2>
+<p>Plan price: ₱49/month bawat karagdagang cashier.</p>
+<p class="small">Ang subscription activation at payment verification ay hindi pa konektado sa totoong payment system.</p>
+</div>
 </section>
+
 </section>
 </main>
-<footer>Made by: Marlon Del Pilar · QUICKMart POS prototype</footer>
+
+<footer>Made by: Marlon Del Pilar · QUICKMart POS</footer>
 
 <script>
 const $=id=>document.getElementById(id);
 const money=n=>'₱'+Number(n||0).toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
-const today=()=>new Date().toLocaleDateString('en-CA');
-let data;
+const today=()=>{let d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+
+const categories=[
+'CHICKEN',
+'CONDIMENTS',
+'MILK & COFFEE',
+'FROZEN FOODS',
+'SOFTDRINKS',
+'RICE & EGGS',
+'GROCERIES',
+'SCHOOL SUPPLIES',
+'OTHERS'
+];
+
+let data={products:[],sales:[],expenses:[],settings:{name:'QUICKMart POS',owner:'Marlon Del Pilar',font:'Arial'}};
+
 try{
-data=JSON.parse(localStorage.getItem('quickmart_data'))||{};
-}catch(e){data={}}
-data.products=data.products||[];
-data.sales=data.sales||[];
-data.expenses=data.expenses||[];
-data.settings=data.settings||{name:'QUICKMart POS',owner:'Marlon Del Pilar',font:'Arial'};
-function save(){localStorage.setItem('quickmart_data',JSON.stringify(data));render()}
+const old=JSON.parse(localStorage.getItem('quickmart_data')||'null');
+if(old&&typeof old==='object'){
+data.products=Array.isArray(old.products)?old.products:[];
+data.sales=Array.isArray(old.sales)?old.sales:[];
+data.expenses=Array.isArray(old.expenses)?old.expenses:[];
+data.settings=Object.assign(data.settings,old.settings||{});
+}
+}catch(e){}
+
+data.products.forEach(p=>{
+if(!p.category)p.category='OTHERS';
+if(!p.unit)p.unit='pcs';
+});
+
+function esc(s){
+return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function save(){
+try{localStorage.setItem('quickmart_data',JSON.stringify(data));}
+catch(e){alert('Hindi ma-save ang data. Mag-export ng backup at tingnan ang storage ng browser.');}
+render();
+}
+
+function fillCategoryOptions(){
+$('pcategory').innerHTML=categories.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+$('inventoryFilter').innerHTML='<option value="ALL">ALL CATEGORIES</option>'+categories.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+$('saleCategory').innerHTML='<option value="ALL">ALL CATEGORIES</option>'+categories.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+}
+
 function login(){
- if(!$('username').value.trim()||!$('password').value){alert('Ilagay ang email at password.');return}
- // Prototype only: this does not verify credentials securely.
- sessionStorage.setItem('quickmart_demo_login','yes');
- $('login').classList.add('hidden');$('app').classList.remove('hidden');render();
+if(!$('username').value.trim()||!$('password').value){
+alert('Ilagay ang email at password.');return;
 }
-function logout(){sessionStorage.removeItem('quickmart_demo_login');location.reload()}
-function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));$(id).classList.remove('hidden');render()}
+sessionStorage.setItem('quickmart_demo_login','yes');
+$('login').classList.add('hidden');
+$('app').classList.remove('hidden');
+render();
+}
+
+function logout(){
+sessionStorage.removeItem('quickmart_demo_login');
+location.reload();
+}
+
+function show(id){
+document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+$(id).classList.remove('hidden');
+render();
+}
+
 function addProduct(){
- let name=$('pname').value.trim(),price=+$('price').value,cost=+$('cost').value,stock=+$('stock').value,unit=$('unit').value;
- if(!name||$('price').value===''||$('cost').value===''||$('stock').value===''||price<0||cost<0||stock<0){alert('Pakilagyan nang tama ang lahat ng detalye.');return}
- data.products.push({id:Date.now(),name,price,cost,stock,unit});
- ['pname','price','cost','stock'].forEach(id=>$(id).value='');save();
+const name=$('pname').value.trim();
+const category=$('pcategory').value;
+const price=Number($('price').value);
+const cost=Number($('cost').value);
+const stock=Number($('stock').value);
+const unit=$('unit').value;
+
+if(!name||$('price').value===''||$('cost').value===''||$('stock').value===''){
+alert('Pakilagyan ang lahat ng detalye.');return;
 }
+if(!Number.isFinite(price)||!Number.isFinite(cost)||!Number.isFinite(stock)||price<0||cost<0||stock<0){
+alert('Pakisuri ang presyo, cost at stock.');return;
+}
+
+data.products.push({
+id:Date.now()+Math.floor(Math.random()*1000),
+name,category,price,cost,stock,unit
+});
+
+['pname','price','cost','stock'].forEach(id=>$(id).value='');
+$('pcategory').value=category;
+save();
+alert('Na-save ang produkto sa category na '+category+'.');
+}
+
+function renderInventory(){
+const filter=$('inventoryFilter').value||'ALL';
+const search=($('inventorySearch').value||'').toLowerCase();
+const list=data.products.filter(p=>
+(filter==='ALL'||p.category===filter)&&
+(p.name||'').toLowerCase().includes(search)
+).slice().sort((a,b)=>
+(a.category||'OTHERS').localeCompare(b.category||'OTHERS')||
+a.name.localeCompare(b.name)
+);
+
+$('productsTable').innerHTML='<table><tr><th>Product</th><th>Category</th><th>Stock</th><th>Unit</th><th>Price</th></tr>'+
+list.map(p=>`<tr>
+<td>${esc(p.name)}</td>
+<td><span class="badge">${esc(p.category||'OTHERS')}</span></td>
+<td>${Number(p.stock||0)}</td>
+<td>${esc(p.unit||'pcs')}</td>
+<td>${money(p.price)}</td>
+</tr>`).join('')+'</table>';
+}
+
+function updateSaleProducts(){
+const cat=$('saleCategory').value||'ALL';
+const list=data.products.filter(p=>cat==='ALL'||p.category===cat);
+$('saleProduct').innerHTML=list.map(p=>
+`<option value="${p.id}">${esc(p.name)} — ${esc(p.category||'OTHERS')}</option>`
+).join('');
+if(!list.length)$('saleProduct').innerHTML='<option value="">No products in this category</option>';
+showSaleInfo();
+}
+
+function showSaleInfo(){
+const p=data.products.find(x=>x.id===Number($('saleProduct').value));
+if(!p){$('saleInfo').textContent='Walang produkto sa napiling category.';return;}
+$('saleInfo').textContent='Category: '+p.category+' | Unit: '+p.unit+' | Stock: '+p.stock+' | Price: '+money(p.price)+' per '+p.unit;
+}
+
 function makeSale(){
- let p=data.products.find(x=>x.id===+$('saleProduct').value);
- let qty=+$('saleQty').value,unit=$('saleUnit').value;
- if(!p){alert('Magdagdag muna ng produkto.');return}
- if(p.unit!==unit){alert('Hindi tugma ang unit. Piliin ang '+p.unit+'.');return}
- if(qty<=0||qty>p.stock){alert('Hindi sapat ang stock o mali ang quantity.');return}
- p.stock=+(p.stock-qty).toFixed(3);
- data.sales.push({date:today(),name:p.name,qty,unit,price:p.price,cost:p.cost,total:qty*p.price,profit:qty*(p.price-p.cost),payment:$('payment').value,time:new Date().toLocaleTimeString()});
- $('saleQty').value=1;save();alert('Na-save ang sale: '+money(qty*p.price));
+const p=data.products.find(x=>x.id===Number($('saleProduct').value));
+const qty=Number($('saleQty').value);
+const unit=$('saleUnit').value;
+const discount=Number($('discount').value||0);
+const payment=$('payment').value;
+const received=Number($('cashReceived').value||0);
+
+if(!p){alert('Pumili muna ng produkto.');return;}
+if(!Number.isFinite(qty)||qty<=0){alert('Maglagay ng tamang quantity.');return;}
+if(p.unit!==unit){alert('Hindi tugma ang unit. Ang produktong ito ay '+p.unit+'.');return;}
+if(qty>p.stock){alert('Hindi sapat ang stock. Available: '+p.stock+' '+p.unit);return;}
+if(!Number.isFinite(discount)||discount<0||discount>qty*p.price){alert('Pakisuri ang discount.');return;}
+
+const subtotal=qty*p.price;
+const total=subtotal-discount;
+
+if(payment==='Cash'&&received<total){
+alert('Kulang ang cash received. Kailangang hindi bababa sa '+money(total)+'.');return;
 }
+
+p.stock=Number((p.stock-qty).toFixed(3));
+
+data.sales.push({
+date:today(),
+name:p.name,
+category:p.category||'OTHERS',
+qty,unit,price:p.price,cost:p.cost,
+subtotal,discount,total,
+profit:total-qty*p.cost,
+payment,
+received:payment==='Cash'?received:total,
+change:payment==='Cash'?received-total:0,
+time:new Date().toLocaleTimeString(),
+store:data.settings.name||'QUICKMart POS',
+owner:data.settings.owner||'Marlon Del Pilar'
+});
+
+const s=data.sales[data.sales.length-1];
+$('saleResult').innerHTML=`<div class="card"><h3>Sale Completed</h3>
+<p>${esc(s.name)} (${s.qty} ${esc(s.unit)})</p>
+<p>Subtotal: ${money(subtotal)}</p>
+<p>Discount: ${money(discount)}</p>
+<p><strong>Total: ${money(total)}</strong></p>
+<p>Payment: ${esc(payment)}</p>
+<p>Change: ${money(s.change)}</p>
+<button onclick="printReceipt()">Print Last Receipt</button></div>`;
+
+$('saleQty').value='1';
+$('discount').value='0';
+$('cashReceived').value='';
+save();
+}
+
 function addExpense(){
- let name=$('expenseName').value.trim(),amount=+$('expenseAmount').value;
- if(!name||$('expenseAmount').value===''||amount<=0){alert('Ilagay ang detalye at halagang mas mataas sa zero.');return}
- data.expenses.push({date:today(),name,amount});
- $('expenseName').value='';$('expenseAmount').value='';save();
+const name=$('expenseName').value.trim();
+const amount=Number($('expenseAmount').value);
+if(!name||$('expenseAmount').value===''||!Number.isFinite(amount)||amount<=0){
+alert('Ilagay ang expense description at tamang halaga.');return;
 }
+data.expenses.push({date:today(),name,amount});
+$('expenseName').value='';
+$('expenseAmount').value='';
+save();
+}
+
 function totals(){
- let sales=data.sales.filter(x=>x.date===today()),expenses=data.expenses.filter(x=>x.date===today());
- return {s:sales.reduce((a,x)=>a+x.total,0),p:sales.reduce((a,x)=>a+x.profit,0),e:expenses.reduce((a,x)=>a+x.amount,0)}
+const sales=data.sales.filter(x=>x.date===today());
+const expenses=data.expenses.filter(x=>x.date===today());
+return{
+sales:sales.reduce((a,x)=>a+Number(x.total||0),0),
+gross:sales.reduce((a,x)=>a+Number(x.profit||0),0),
+expenses:expenses.reduce((a,x)=>a+Number(x.amount||0),0),
+count:sales.length
+};
 }
+
+function renderSales(){
+const list=data.sales.filter(x=>x.date===today()).slice().reverse();
+$('salesTable').innerHTML='<table><tr><th>Time</th><th>Item</th><th>Category</th><th>Qty</th><th>Total</th><th>Payment</th></tr>'+
+list.map(x=>`<tr>
+<td>${esc(x.time)}</td><td>${esc(x.name)}</td>
+<td>${esc(x.category||'OTHERS')}</td>
+<td>${x.qty} ${esc(x.unit)}</td><td>${money(x.total)}</td>
+<td>${esc(x.payment)}</td>
+</tr>`).join('')+'</table>';
+}
+
+function renderExpenses(){
+const list=data.expenses.filter(x=>x.date===today());
+$('expensesTable').innerHTML='<table><tr><th>Description</th><th>Amount</th></tr>'+
+list.map(x=>`<tr><td>${esc(x.name)}</td><td>${money(x.amount)}</td></tr>`).join('')+'</table>';
+}
+
 function render(){
- $('storeTitle').textContent=data.settings.name||'QUICKMart POS';
- document.body.style.fontFamily=data.settings.font||'Arial';
- $('totalSales').textContent=money(totals().s);$('totalExpenses').textContent=money(totals().e);$('profit').textContent=money(totals().p-totals().e);$('productCount').textContent=data.products.length;
- $('saleProduct').innerHTML=data.products.map(p=>`<option value="${p.id}">${esc(p.name)} — ${p.unit} — Stock: ${p.stock}</option>`).join('');
- $('productsTable').innerHTML='<table><tr><th>Product</th><th>Unit</th><th>Stock</th><th>Price</th></tr>'+data.products.map(p=>`<tr><td>${esc(p.name)}</td><td>${p.unit}</td><td>${p.stock}</td><td>${money(p.price)}</td></tr>`).join('')+'</table>';
- $('salesTable').innerHTML='<table><tr><th>Time</th><th>Item</th><th>Qty</th><th>Total</th><th>Payment</th></tr>'+data.sales.filter(x=>x.date===today()).slice().reverse().map(x=>`<tr><td>${esc(x.time)}</td><td>${esc(x.name)}</td><td>${x.qty} ${x.unit}</td><td>${money(x.total)}</td><td>${esc(x.payment)}</td></tr>`).join('')+'</table>';
- $('expensesTable').innerHTML='<table><tr><th>Expense</th><th>Amount</th></tr>'+data.expenses.filter(x=>x.date===today()).map(x=>`<tr><td>${esc(x.name)}</td><td>${money(x.amount)}</td></tr>`).join('')+'</table>';
- $('reportSales').textContent=money(totals().s);$('reportProfit').textContent=money(totals().p);$('reportExpenses').textContent=money(totals().e);$('reportNet').textContent=money(totals().p-totals().e);
- $('newStoreName').value=data.settings.name||'';$('ownerName').value=data.settings.owner||'Marlon Del Pilar';$('font').value=data.settings.font||'Arial';$('dti').value=data.settings.dti||'';$('tin').value=data.settings.tin||'';
+$('storeTitle').textContent=data.settings.name||'QUICKMart POS';
+document.body.style.fontFamily=data.settings.font||'Arial';
+
+const t=totals();
+$('totalSales').textContent=money(t.sales);
+$('totalExpenses').textContent=money(t.expenses);
+$('netProfit').textContent=money(t.gross-t.expenses);
+$('productCount').textContent=data.products.length;
+
+const low=data.products.filter(p=>Number(p.stock)<=5);
+$('lowStock').innerHTML=low.length?
+low.map(p=>`<p>${esc(p.name)} — ${p.stock} ${esc(p.unit)} <span class="badge">${esc(p.category||'OTHERS')}</span></p>`).join(''):
+'<p class="small">Walang produktong may stock na 5 o mas mababa.</p>';
+
+renderInventory();
+updateSaleProducts();
+renderSales();
+renderExpenses();
+
+$('reportDate').textContent=today();
+$('reportSales').textContent=money(t.sales);
+$('reportGross').textContent=money(t.gross);
+$('reportExpenses').textContent=money(t.expenses);
+$('reportNet').textContent=money(t.gross-t.expenses);
+$('transactionCount').textContent=t.count;
+
+$('newStoreName').value=data.settings.name||'QUICKMart POS';
+$('ownerName').value=data.settings.owner||'Marlon Del Pilar';
+$('dti').value=data.settings.dti||'';
+$('tin').value=data.settings.tin||'';
+$('font').value=data.settings.font||'Arial';
 }
+
 function saveSettings(){
- data.settings={name:$('newStoreName').value.trim()||'QUICKMart POS',owner:$('ownerName').value.trim(),font:$('font').value,dti:$('dti').value.trim(),tin:$('tin').value.trim()};save();alert('Na-save ang settings.');
+data.settings={
+name:$('newStoreName').value.trim()||'QUICKMart POS',
+owner:$('ownerName').value.trim()||'Marlon Del Pilar',
+dti:$('dti').value.trim(),
+tin:$('tin').value.trim(),
+font:$('font').value
+};
+save();
+alert('Na-save ang store settings.');
 }
+
 function zReading(){
- let t=totals();
- $('zResult').innerHTML='<hr><h3>Z-Reading · '+esc(today())+'</h3><p>Sales: '+money(t.s)+'</p><p>Gross profit: '+money(t.p)+'</p><p>Expenses: '+money(t.e)+'</p><p>Net estimate: '+money(t.p-t.e)+'</p><p class="small">I-save o i-print ang ulat bago magpalit ng araw. Ang prototype na ito ay wala pang automated beginning balance carry-forward.</p>';
- window.print();
+const t=totals();
+$('zResult').innerHTML=`<hr><h3>Z-Reading — ${esc(today())}</h3>
+<p>Total Sales: ${money(t.sales)}</p>
+<p>Estimated Gross Profit: ${money(t.gross)}</p>
+<p>Expenses: ${money(t.expenses)}</p>
+<p>Estimated Net Profit: ${money(t.gross-t.expenses)}</p>
+<p>Transactions: ${t.count}</p>`;
+window.print();
 }
+
+function printReceipt(){
+const s=data.sales[data.sales.length-1];
+if(!s){alert('Wala pang sale na mai-print.');return;}
+const w=window.open('','_blank','width=380,height=650');
+if(!w){alert('Payagan muna ang pop-ups para makapag-print.');return;}
+w.document.write(`<!DOCTYPE html><html><head><title>Receipt</title>
+<style>body{font-family:Arial,sans-serif;width:280px;margin:15px auto;font-size:13px}
+h2,p{text-align:center;margin:5px 0}.line{border-top:1px dashed #333;margin:10px 0}
+.row{display:flex;justify-content:space-between;margin:6px 0}</style></head><body>
+<h2>${esc(s.store||'QUICKMart POS')}</h2>
+<p>OFFICIAL SALES RECORD / DEMO RECEIPT</p>
+<div class="line"></div>
+<p>${esc(s.date)} ${esc(s.time)}</p>
+<p>${esc(s.name)}</p>
+<p>${s.qty} ${esc(s.unit)} × ${money(s.price)}</p>
+<div class="row"><span>Subtotal</span><span>${money(s.subtotal)}</span></div>
+<div class="row"><span>Discount</span><span>${money(s.discount)}</span></div>
+<div class="row"><strong>TOTAL</strong><strong>${money(s.total)}</strong></div>
+<div class="row"><span>Payment</span><span>${esc(s.payment)}</span></div>
+<div class="row"><span>Cash received</span><span>${money(s.received)}</span></div>
+<div class="row"><span>Change</span><span>${money(s.change)}</span></div>
+<div class="line"></div>
+<p>Thank you!</p><p>Made by: ${esc(s.owner||'Marlon Del Pilar')}</p>
+<p>Demo receipt — not a BIR-registered official receipt.</p>
+<script>window.onload=()=>window.print();<\/script>
+</body></html>`);
+w.document.close();
+}
+
 function exportData(){
- let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
- let url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='quickmart-backup.json';a.click();URL.revokeObjectURL(url);
+const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+const url=URL.createObjectURL(blob);
+const a=document.createElement('a');
+a.href=url;a.download='quickmart-backup.json';a.click();
+setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-if(sessionStorage.getItem('quickmart_demo_login')==='yes'){$('login').classList.add('hidden');$('app').classList.remove('hidden')}
+
+fillCategoryOptions();
+
+if(sessionStorage.getItem('quickmart_demo_login')==='yes'){
+$('login').classList.add('hidden');
+$('app').classList.remove('hidden');
+}
+
 render();
 </script>
 </body>
