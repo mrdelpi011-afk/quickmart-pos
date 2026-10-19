@@ -1,102 +1,241 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fil">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>QUICKMart POS Professional Edition</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#064e3b">
+<title>QUICKMart POS</title>
 
 <style>
 :root {
-  --green: #075b46;
-  --green2: #0b8060;
-  --gold: #d7b35a;
-  --bg: #f1f6f2;
+  --green: #064e3b;
+  --green2: #087f5b;
+  --gold: #e6bd62;
+  --bg: #f3f7f5;
   --white: #ffffff;
-  --text: #18352d;
+  --text: #18332b;
+  --muted: #718078;
+  --border: #e0e9e3;
 }
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg,#e8f3ec,#f9f5e8);
+  background: var(--bg);
   color: var(--text);
+  font-family: Arial, sans-serif;
 }
 header {
-  background: linear-gradient(120deg,var(--green),var(--green2));
+  background: linear-gradient(135deg,#033b2c,#087f5b);
   color: white;
-  padding: 22px;
+  padding: 25px 18px;
   border-bottom: 4px solid var(--gold);
 }
-header h1 { margin: 0; }
-header p { margin-bottom: 0; }
-main { max-width: 1100px; margin: auto; padding: 15px; }
+.brand {
+  font-size: 25px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+.brand span { color: var(--gold); }
+.tagline {
+  font-size: 12px;
+  margin-top: 6px;
+  opacity: .85;
+}
+.header-row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.badge {
+  background:#ffffff20;
+  border:1px solid #ffffff40;
+  padding:8px 11px;
+  border-radius:20px;
+  font-size:11px;
+}
+main {
+  max-width: 900px;
+  margin:auto;
+  padding:16px;
+}
+.welcome {
+  margin: 4px 0 18px;
+}
+.welcome h2 {
+  margin:0 0 6px;
+  font-size:23px;
+}
+.welcome p {
+  color:var(--muted);
+  margin:0;
+  font-size:13px;
+}
 .card {
-  background: white;
-  border-radius: 14px;
-  padding: 16px;
-  margin: 12px 0;
-  box-shadow: 0 4px 15px #00000010;
+  background:var(--white);
+  padding:19px;
+  border-radius:17px;
+  margin-bottom:16px;
+  border:1px solid var(--border);
+  box-shadow:0 5px 20px #123d2910;
+}
+.card-title {
+  font-size:16px;
+  font-weight:bold;
+  margin-bottom:17px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+label {
+  display:block;
+  font-size:12px;
+  font-weight:bold;
+  margin:13px 0 7px;
+  color:#52665b;
+}
+input, select {
+  width:100%;
+  min-height:46px;
+  padding:12px;
+  border:1px solid #d8e4dc;
+  border-radius:10px;
+  background:#fff;
+  color:var(--text);
+  font-size:15px;
+  outline:none;
+}
+input:focus, select:focus {
+  border-color:var(--green2);
+  box-shadow:0 0 0 3px #087f5b15;
+}
+.grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.summary {
+  background:linear-gradient(135deg,#064e3b,#087f5b);
+  color:white;
+  border-radius:16px;
+  padding:19px;
+  margin-top:18px;
+}
+.summary-label {
+  color:#d4e9df;
+  font-size:12px;
+}
+.total {
+  color:var(--gold);
+  font-size:32px;
+  font-weight:900;
+  margin:7px 0 14px;
+}
+.summary-line {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 0;
+  border-top:1px solid #ffffff25;
+  font-size:13px;
+}
+.change-box {
+  background:#fff;
+  color:var(--green);
+  border:2px solid var(--gold);
+  border-radius:13px;
+  padding:15px;
+  margin-top:15px;
+}
+.change-label {
+  font-size:12px;
+  font-weight:bold;
+}
+.change-amount {
+  font-size:32px;
+  font-weight:900;
+  margin-top:5px;
+}
+.status {
+  font-size:12px;
+  margin-top:6px;
+  font-weight:bold;
 }
 button {
-  border: 0;
-  border-radius: 8px;
-  padding: 11px 14px;
-  margin: 3px;
-  background: var(--green);
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
+  border:0;
+  border-radius:11px;
+  padding:14px;
+  width:100%;
+  font-weight:bold;
+  font-size:14px;
+  cursor:pointer;
 }
-input, select, textarea {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0 12px;
-  border: 1px solid #ccdcd2;
-  border-radius: 8px;
+.primary {
+  background:linear-gradient(135deg,#087f5b,#064e3b);
+  color:white;
+  margin-top:15px;
 }
-label { font-size: 13px; font-weight: bold; }
-nav { display: flex; flex-wrap: wrap; gap: 4px; }
-nav button { background: #e0ece4; color: var(--green); }
-nav button:hover { background: var(--gold); }
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2,minmax(0,1fr));
-  gap: 10px;
+.secondary {
+  background:#edf5ef;
+  color:var(--green);
+  margin-top:9px;
 }
-.stat {
-  background: white;
-  padding: 15px;
-  border-radius: 12px;
+.gold-button {
+  background:var(--gold);
+  color:#26382d;
+  margin-top:9px;
 }
-.stat strong {
-  display: block;
-  color: var(--green);
-  font-size: 22px;
-  margin-top: 8px;
+button:active { transform:scale(.99); }
+.receipt {
+  display:none;
+  background:white;
+  border:1px dashed #9aaba0;
+  padding:18px;
+  margin-top:16px;
+  color:#111;
+  font-family:monospace;
 }
-table { width: 100%; border-collapse: collapse; }
-th,td {
-  padding: 9px;
-  border-bottom: 1px solid #e0e8e2;
-  text-align: left;
-  font-size: 13px;
+.receipt h3 { text-align:center; }
+.receipt p {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
 }
-.table-wrap { overflow-x: auto; }
-.hidden { display: none; }
-.note {
-  background: #fff5d8;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 12px;
+.history-item {
+  padding:12px 0;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+}
+.history-item:last-child { border:0; }
+.small {
+  color:var(--muted);
+  font-size:11px;
+  margin-top:5px;
 }
 footer {
-  text-align: center;
-  padding: 20px;
-  color: #60766b;
-  font-size: 12px;
+  text-align:center;
+  padding:23px 12px;
+  color:#728078;
+  font-size:11px;
 }
-@media(min-width:650px) {
-  .grid { grid-template-columns: repeat(4,minmax(0,1fr)); }
+footer strong { color:var(--green); }
+@media(max-width:480px) {
+  main { padding:12px; }
+  .card { padding:15px; }
+  .grid { gap:9px; }
+  .total { font-size:29px; }
+  .brand { font-size:22px; }
+}
+@media print {
+  body * { visibility:hidden; }
+  #receipt, #receipt * { visibility:visible; }
+  #receipt {
+    display:block !important;
+    position:absolute;
+    left:0; top:0;
+    width:100%;
+    border:0;
+  }
 }
 </style>
 </head>
@@ -104,557 +243,374 @@ footer {
 <body>
 
 <header>
-  <h1 id="storeTitle">QUICKMart POS</h1>
-  <p>Your Needs, Our Priority.</p>
-  <p>Professional Store Management</p>
+  <div class="header-row">
+    <div>
+      <div class="brand">QUICK<span>Mart</span> POS</div>
+      <div class="tagline">Your Needs, Our Priority.</div>
+    </div>
+    <div class="badge">● SALES REGISTER</div>
+  </div>
 </header>
 
 <main>
+  <section class="welcome">
+    <h2>Magandang araw! 👋</h2>
+    <p>Madaliang benta, tamang bayad at tamang sukli.</p>
+  </section>
 
-<section id="login" class="card">
-  <h2>Welcome to QUICKMart POS</h2>
-  <label>Username</label>
-  <input id="username" value="owner">
-  <label>Password</label>
-  <input id="password" type="password"
-         placeholder="Enter password">
-  <button onclick="login()">Sign In</button>
-  <p id="loginMessage"></p>
-  <p class="note">
-    Demo login: owner / QMowner123!<br>
-    Pang-test lamang ito, hindi secure na production login.
-  </p>
-</section>
+  <section class="card">
+    <div class="card-title">👤 SUKI / CUSTOMER</div>
 
-<section id="application" class="hidden">
+    <label for="customer">Pangalan ng Customer o Suki</label>
+    <input id="customer" type="text"
+      placeholder="Hal. Juan Dela Cruz">
 
-  <div class="grid">
-    <div class="stat">
-      Today's Sales
-      <strong id="todaySales">₱0.00</strong>
+    <label for="product">Produkto</label>
+    <select id="product" onchange="changeProduct()">
+      <option value="Dressed Chicken">Dressed Chicken</option>
+      <option value="Atay">Atay</option>
+      <option value="Balunbalunan">Balunbalunan</option>
+      <option value="Chicken Feet">Chicken Feet</option>
+      <option value="Hotdog">Hotdog</option>
+      <option value="Ibang Produkto">Ibang Produkto</option>
+    </select>
+
+    <div class="grid">
+      <div>
+        <label for="qty">Dami / Kilo</label>
+        <input id="qty" type="number" min="0"
+          step="0.001" value="1" oninput="calculate()">
+      </div>
+      <div>
+        <label for="price">Presyo kada kilo / unit (₱)</label>
+        <input id="price" type="number" min="0"
+          step="0.01" value="220" oninput="calculate()">
+      </div>
     </div>
-    <div class="stat">
-      Products
-      <strong id="productCount">0</strong>
+
+    <label for="extra">Ibang singil o dagdag (₱)</label>
+    <input id="extra" type="number" min="0"
+      step="0.01" value="0" oninput="calculate()">
+
+    <label for="discount">Discount (₱)</label>
+    <input id="discount" type="number" min="0"
+      step="0.01" value="0" oninput="calculate()">
+  </section>
+
+  <section class="card">
+    <div class="card-title">💵 BAYARAN NG CUSTOMER</div>
+
+    <div class="summary">
+      <div class="summary-label">KABUUANG BABAYARAN</div>
+      <div class="total" id="total">₱220.00</div>
+
+      <div class="summary-line">
+        <span>Produkto</span>
+        <strong id="productLine">Dressed Chicken</strong>
+      </div>
+      <div class="summary-line">
+        <span>Dami × Presyo</span>
+        <strong id="calculation">1 × ₱220.00</strong>
+      </div>
+      <div class="summary-line">
+        <span>Dagdag</span>
+        <strong id="extraLine">₱0.00</strong>
+      </div>
+      <div class="summary-line">
+        <span>Discount</span>
+        <strong id="discountLine">₱0.00</strong>
+      </div>
     </div>
-    <div class="stat">
-      Expenses
-      <strong id="expenseTotal">₱0.00</strong>
+
+    <label for="paid">Halagang Ibinayad ng Customer (₱)</label>
+    <input id="paid" type="number" min="0"
+      step="0.01" placeholder="Ilagay ang perang ibinayad"
+      oninput="calculate()">
+
+    <div class="change-box">
+      <div class="change-label">🪙 SUKLI NG CUSTOMER</div>
+      <div class="change-amount" id="change">₱0.00</div>
+      <div class="status" id="paymentStatus">
+        Ilagay ang bayad ng customer.
+      </div>
     </div>
-    <div class="stat">
-      Estimated Profit
-      <strong id="profitTotal">₱0.00</strong>
+
+    <button class="primary" onclick="completeSale()">
+      ✓ KUMPIRMAHIN ANG BENTA
+    </button>
+    <button class="secondary" onclick="printReceipt()">
+      🖨️ I-PRINT ANG RESIBO
+    </button>
+    <button class="gold-button" onclick="resetSale()">
+      + BAGONG TRANSACTION
+    </button>
+
+    <div class="receipt" id="receipt">
+      <h3>QUICKMart POS</h3>
+      <p><span>Resibo:</span><span id="rNumber"></span></p>
+      <p><span>Petsa:</span><span id="rDate"></span></p>
+      <p><span>Customer:</span><span id="rCustomer"></span></p>
+      <hr>
+      <p><span>Produkto:</span><span id="rProduct"></span></p>
+      <p><span>Dami:</span><span id="rQty"></span></p>
+      <p><span>Presyo:</span><span id="rPrice"></span></p>
+      <p><span>Dagdag:</span><span id="rExtra"></span></p>
+      <p><span>Discount:</span><span id="rDiscount"></span></p>
+      <hr>
+      <p><strong>KABUUAN:</strong><strong id="rTotal"></strong></p>
+      <p><span>Bayad:</span><span id="rPaid"></span></p>
+      <p><strong>SUKLI:</strong><strong id="rChange"></strong></p>
+      <hr>
+      <p style="justify-content:center">Salamat po sa inyong pagbili!</p>
+      <p style="justify-content:center">Made by: Marlon Del Pilar</p>
+      <p style="justify-content:center;font-size:10px">
+        Hindi ito BIR-registered receipt.
+      </p>
     </div>
-  </div>
+  </section>
 
-  <nav>
-    <button onclick="page('dashboard')">Dashboard</button>
-    <button onclick="page('sales')">Sales</button>
-    <button onclick="page('inventory')">Inventory</button>
-    <button onclick="page('expenses')">Expenses</button>
-    <button onclick="page('reports')">Reports / Z-Reading</button>
-    <button onclick="page('customers')">Customers / Utang</button>
-    <button onclick="page('subscription')">Subscription</button>
-    <button onclick="page('chat')">Chat with Owner</button>
-    <button onclick="page('settings')">Settings</button>
-  </nav>
-
-  <div id="content" class="card"></div>
-
-</section>
-
-<div class="note">
-  Made by: Marlon Del Pilar<br>
-  Browser prototype: iisang device lamang muna ang pag-iimbakan
-  ng data. Hindi pa aktibo ang online subscription at online chat.
-</div>
-
+  <section class="card">
+    <div class="card-title">📋 KASAYSAYAN NG BENTA</div>
+    <div class="grid">
+      <div>
+        <div class="small">Nakumpirmang transaksyon</div>
+        <h2 id="saleCount">0</h2>
+      </div>
+      <div>
+        <div class="small">Kabuuang benta</div>
+        <h2 id="salesTotal">₱0.00</h2>
+      </div>
+    </div>
+    <div id="history"></div>
+  </section>
 </main>
 
-<footer>QUICKMart POS Professional Edition</footer>
+<footer>
+  <strong>QUICKMart POS</strong><br>
+  Your Needs, Our Priority.<br><br>
+  Made by: Marlon Del Pilar
+</footer>
 
 <script>
-const KEY = "quickmart_pos_demo";
+const peso = n => "₱" + Number(n || 0).toLocaleString(
+  "en-PH", {minimumFractionDigits:2, maximumFractionDigits:2}
+);
 
-let data = {
-  products: [],
-  sales: [],
-  expenses: [],
-  customers: [],
-  messages: [],
-  settings: {
-    store: "QUICKMart POS",
-    owner: "Marlon Del Pilar",
-    font: "Arial",
-    opening: 0
+function numberValue(id) {
+  return Math.max(0, Number(document.getElementById(id).value) || 0);
+}
+
+function getTotal() {
+  const qty = numberValue("qty");
+  const price = numberValue("price");
+  const extra = numberValue("extra");
+  const discount = numberValue("discount");
+
+  return Math.max(0, qty * price + extra - discount);
+}
+
+function calculate() {
+  const qty = numberValue("qty");
+  const price = numberValue("price");
+  const extra = numberValue("extra");
+  const discount = numberValue("discount");
+  const total = getTotal();
+  const paid = numberValue("paid");
+  const diff = paid - total;
+
+  document.getElementById("total").textContent = peso(total);
+  document.getElementById("productLine").textContent =
+    document.getElementById("product").value;
+  document.getElementById("calculation").textContent =
+    qty + " × " + peso(price);
+  document.getElementById("extraLine").textContent = peso(extra);
+  document.getElementById("discountLine").textContent = peso(discount);
+
+  document.getElementById("change").textContent =
+    diff >= 0 ? peso(diff) : peso(0);
+
+  const status = document.getElementById("paymentStatus");
+
+  if (paid <= 0) {
+    status.textContent = "Ilagay ang bayad ng customer.";
+  } else if (diff < 0) {
+    status.textContent = "KULANG ANG BAYAD NG " + peso(-diff);
+  } else {
+    status.textContent = "✓ BAYAD NA • SUKLI: " + peso(diff);
   }
-};
-
-try {
-  const saved = localStorage.getItem(KEY);
-  if (saved) data = JSON.parse(saved);
-} catch (e) {
-  console.log("Saved data could not be loaded.");
 }
 
-function save() {
-  localStorage.setItem(KEY, JSON.stringify(data));
-  metrics();
+function changeProduct() {
+  const product = document.getElementById("product").value;
+  if (product === "Dressed Chicken") {
+    document.getElementById("price").value = 220;
+  } else {
+    document.getElementById("price").value = 0;
+  }
+  calculate();
 }
 
-function money(n) {
-  return "₱" + Number(n || 0).toLocaleString("en-PH", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
+function getSales() {
+  try {
+    return JSON.parse(localStorage.getItem("qm_sales") || "[]");
+  } catch (e) {
+    return [];
+  }
+}
+
+function completeSale() {
+  const qty = numberValue("qty");
+  const paid = numberValue("paid");
+  const total = getTotal();
+
+  if (qty <= 0) {
+    alert("Ilagay muna ang tamang dami o kilo.");
+    return;
+  }
+
+  if (paid < total) {
+    alert("Kulang ang bayad ng customer. Hindi pa makukumpirma ang benta.");
+    return;
+  }
+
+  const customer =
+    document.getElementById("customer").value.trim() || "Walk-in Customer";
+
+  const sale = {
+    id: Date.now(),
+    date: new Date().toLocaleString("en-PH"),
+    customer: customer,
+    product: document.getElementById("product").value,
+    qty: qty,
+    price: numberValue("price"),
+    extra: numberValue("extra"),
+    discount: numberValue("discount"),
+    total: total,
+    paid: paid,
+    change: paid - total
+  };
+
+  const sales = getSales();
+  sales.unshift(sale);
+
+  try {
+    localStorage.setItem("qm_sales", JSON.stringify(sales));
+  } catch (e) {
+    alert("Hindi ma-save ang transaksyon sa browser.");
+    return;
+  }
+
+  fillReceipt(sale);
+  renderHistory();
+
+  alert(
+    "Matagumpay ang benta!\n\n" +
+    "Customer: " + customer +
+    "\nKabuuang bayad: " + peso(total) +
+    "\nIbinayad: " + peso(paid) +
+    "\nSukli: " + peso(paid - total)
+  );
+}
+
+function fillReceipt(sale) {
+  document.getElementById("rNumber").textContent = sale.id;
+  document.getElementById("rDate").textContent = sale.date;
+  document.getElementById("rCustomer").textContent = sale.customer;
+  document.getElementById("rProduct").textContent = sale.product;
+  document.getElementById("rQty").textContent = sale.qty;
+  document.getElementById("rPrice").textContent = peso(sale.price);
+  document.getElementById("rExtra").textContent = peso(sale.extra);
+  document.getElementById("rDiscount").textContent = peso(sale.discount);
+  document.getElementById("rTotal").textContent = peso(sale.total);
+  document.getElementById("rPaid").textContent = peso(sale.paid);
+  document.getElementById("rChange").textContent = peso(sale.change);
+  document.getElementById("receipt").style.display = "block";
+}
+
+function printReceipt() {
+  const customer =
+    document.getElementById("customer").value.trim() || "Walk-in Customer";
+  const qty = numberValue("qty");
+  const total = getTotal();
+  const paid = numberValue("paid");
+
+  if (qty <= 0 || paid < total) {
+    alert("Siguraduhing tama ang dami at sapat ang bayad bago mag-print.");
+    return;
+  }
+
+  const sales = getSales();
+  const lastSale = sales[0];
+
+  if (lastSale && lastSale.customer === customer &&
+      lastSale.total === total && lastSale.paid === paid) {
+    fillReceipt(lastSale);
+  } else {
+    fillReceipt({
+      id: "PREVIEW",
+      date: new Date().toLocaleString("en-PH"),
+      customer: customer,
+      product: document.getElementById("product").value,
+      qty: qty,
+      price: numberValue("price"),
+      extra: numberValue("extra"),
+      discount: numberValue("discount"),
+      total: total,
+      paid: paid,
+      change: paid - total
+    });
+  }
+
+  window.print();
+}
+
+function resetSale() {
+  document.getElementById("customer").value = "";
+  document.getElementById("product").value = "Dressed Chicken";
+  document.getElementById("qty").value = 1;
+  document.getElementById("price").value = 220;
+  document.getElementById("extra").value = 0;
+  document.getElementById("discount").value = 0;
+  document.getElementById("paid").value = "";
+  document.getElementById("receipt").style.display = "none";
+  calculate();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function renderHistory() {
+  const sales = getSales();
+  document.getElementById("saleCount").textContent = sales.length;
+
+  const sum = sales.reduce((n, sale) => n + Number(sale.total || 0), 0);
+  document.getElementById("salesTotal").textContent = peso(sum);
+
+  const history = document.getElementById("history");
+
+  if (!sales.length) {
+    history.innerHTML = '<p class="small">Wala pang nakumpirmang benta.</p>';
+    return;
+  }
+
+  history.innerHTML = sales.slice(0, 10).map(sale => `
+    <div class="history-item">
+      <strong>${escapeHTML(sale.customer)}</strong>
+      <div>${escapeHTML(sale.product)} · ${sale.qty}</div>
+      <div>Kabuuan: <strong>${peso(sale.total)}</strong>
+      · Sukli: ${peso(sale.change)}</div>
+      <div class="small">${escapeHTML(sale.date)}</div>
+    </div>
+  `).join("");
 }
 
 function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[c]));
+  return String(value).replace(/[&<>"']/g, ch => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  })[ch]);
 }
 
-function login() {
-  const u = document.getElementById("username").value;
-  const p = document.getElementById("password").value;
-
-  if (u === "owner" && p === "QMowner123!") {
-    document.getElementById("login").classList.add("hidden");
-    document.getElementById("application").classList.remove("hidden");
-    metrics();
-    page("dashboard");
-  } else {
-    document.getElementById("loginMessage").textContent =
-      "Incorrect Password! Please try again.";
-  }
-}
-
-function page(name) {
-  const el = document.getElementById("content");
-
-  if (name === "dashboard") {
-    el.innerHTML = `
-      <h2>Store Dashboard</h2>
-      <p>Welcome to QUICKMart POS Professional Edition.</p>
-      <p>Manage your sales, stock, expenses and reports here.</p>`;
-  }
-
-  if (name === "inventory") inventoryPage(el);
-  if (name === "sales") salesPage(el);
-  if (name === "expenses") expensesPage(el);
-  if (name === "reports") reportsPage(el);
-  if (name === "customers") customersPage(el);
-  if (name === "subscription") subscriptionPage(el);
-  if (name === "chat") chatPage(el);
-  if (name === "settings") settingsPage(el);
-}
-
-function inventoryPage(el) {
-  el.innerHTML = `
-    <h2>Inventory</h2>
-    <label>Product Name</label>
-    <input id="pn" placeholder="Product name">
-
-    <label>Category</label>
-    <select id="pc">
-      <option>CHICKEN</option>
-      <option>CONDIMENTS</option>
-      <option>MILK & COFFEE</option>
-      <option>FROZEN FOODS</option>
-      <option>SOFTDRINKS</option>
-      <option>RICE & EGGS</option>
-      <option>GROCERIES</option>
-      <option>SCHOOL SUPPLIES</option>
-      <option>OTHERS</option>
-    </select>
-
-    <label>Unit</label>
-    <select id="pu">
-      <option value="kg">Kilogram (kg)</option>
-      <option value="pcs">Pieces (pcs)</option>
-      <option value="pack">Pack</option>
-      <option value="bottle">Bottle</option>
-      <option value="box">Box</option>
-    </select>
-
-    <label>Selling Price</label>
-    <input id="pp" type="number" min="0">
-
-    <label>Cost per Unit</label>
-    <input id="pco" type="number" min="0">
-
-    <label>Beginning Stock</label>
-    <input id="ps" type="number" min="0" step="any">
-
-    <button onclick="addProduct()">Save Product</button>
-    <div id="productList"></div>`;
-
-  showProducts();
-}
-
-function addProduct() {
-  const name = document.getElementById("pn").value.trim();
-  const price = Number(document.getElementById("pp").value);
-  const cost = Number(document.getElementById("pco").value);
-  const stock = Number(document.getElementById("ps").value);
-
-  if (!name || price < 0 || cost < 0 || stock < 0) {
-    alert("Please complete the product details.");
-    return;
-  }
-
-  data.products.push({
-    id: Date.now(),
-    name,
-    category: document.getElementById("pc").value,
-    unit: document.getElementById("pu").value,
-    price,
-    cost,
-    stock
-  });
-
-  save();
-  page("inventory");
-}
-
-function showProducts() {
-  const list = document.getElementById("productList");
-  if (!list) return;
-
-  list.innerHTML = `
-    <h3>Products</h3>
-    <div class="table-wrap"><table>
-      <tr><th>Product</th><th>Unit</th><th>Stock</th><th>Price</th></tr>
-      ${data.products.map(p => `
-        <tr>
-          <td>${escapeHTML(p.name)}</td>
-          <td>${p.unit}</td>
-          <td>${p.stock}</td>
-          <td>${money(p.price)}</td>
-        </tr>`).join("")}
-    </table></div>`;
-}
-
-function salesPage(el) {
-  el.innerHTML = `
-    <h2>Sales Register</h2>
-    <label>Product</label>
-    <select id="sp">
-      ${data.products.map(p => `
-        <option value="${p.id}">
-          ${escapeHTML(p.name)} (${p.unit}) — ${money(p.price)}
-        </option>`).join("")}
-    </select>
-
-    <label>Quantity</label>
-    <input id="sq" type="number" min="0.001" step="any" value="1">
-
-    <label>Discount (₱)</label>
-    <input id="sd" type="number" min="0" value="0">
-
-    <label>Payment Method</label>
-    <select id="sm">
-      <option>Cash</option>
-      <option>GCash</option>
-      <option>Maya</option>
-      <option>QRPH</option>
-      <option>Debit / ATM Card</option>
-      <option>Credit Card</option>
-      <option>Utang / Receivable</option>
-    </select>
-
-    <label>Customer Name</label>
-    <input id="sc" placeholder="Optional">
-
-    <button onclick="recordSale()">Save Sale</button>
-    <h3>Recent Transactions</h3>
-    <div id="salesList"></div>`;
-
-  showSales();
-}
-
-function recordSale() {
-  const product = data.products.find(
-    p => p.id === Number(document.getElementById("sp").value)
-  );
-
-  const qty = Number(document.getElementById("sq").value);
-  const discount = Number(document.getElementById("sd").value) || 0;
-  const method = document.getElementById("sm").value;
-  const customer = document.getElementById("sc").value.trim();
-
-  if (!product || qty <= 0) {
-    alert("Choose a product and valid quantity.");
-    return;
-  }
-
-  if (method !== "Utang / Receivable" && product.stock < qty) {
-    alert("Insufficient stock.");
-    return;
-  }
-
-  const total = Math.max(0, product.price * qty - discount);
-
-  // Utang does not deduct stock until it is paid.
-  if (method !== "Utang / Receivable") {
-    product.stock = Number((product.stock - qty).toFixed(3));
-  }
-
-  data.sales.push({
-    date: new Date().toISOString().slice(0, 10),
-    product: product.name,
-    unit: product.unit,
-    qty,
-    price: product.price,
-    cost: product.cost,
-    total,
-    method,
-    customer,
-    paid: method !== "Utang / Receivable"
-  });
-
-  save();
-  page("sales");
-}
-
-function showSales() {
-  const el = document.getElementById("salesList");
-  if (!el) return;
-
-  el.innerHTML = `<div class="table-wrap"><table>
-    <tr><th>Date</th><th>Product</th><th>Qty</th><th>Total</th><th>Payment</th></tr>
-    ${data.sales.slice().reverse().map(s => `
-      <tr>
-        <td>${s.date}</td>
-        <td>${escapeHTML(s.product)}</td>
-        <td>${s.qty} ${s.unit}</td>
-        <td>${money(s.total)}</td>
-        <td>${escapeHTML(s.method)}</td>
-      </tr>`).join("")}
-  </table></div>`;
-}
-
-function expensesPage(el) {
-  el.innerHTML = `
-    <h2>Expenses</h2>
-    <label>Expense Name</label>
-    <input id="en" placeholder="Electricity, delivery, etc.">
-    <label>Amount (₱)</label>
-    <input id="ea" type="number" min="0">
-    <button onclick="addExpense()">Save Expense</button>
-    <h3>Expense History</h3>
-    ${data.expenses.map(x => `
-      <p>${escapeHTML(x.name)} — ${money(x.amount)} (${x.date})</p>
-    `).join("")}`;
-}
-
-function addExpense() {
-  const name = document.getElementById("en").value.trim();
-  const amount = Number(document.getElementById("ea").value);
-
-  if (!name || amount <= 0) {
-    alert("Enter the expense name and amount.");
-    return;
-  }
-
-  data.expenses.push({
-    name,
-    amount,
-    date: new Date().toISOString().slice(0, 10)
-  });
-
-  save();
-  page("expenses");
-}
-
-function reportsPage(el) {
-  const sales = data.sales.reduce((a, s) => a + s.total, 0);
-  const cost = data.sales
-    .filter(s => s.paid)
-    .reduce((a, s) => a + s.cost * s.qty, 0);
-  const expenses = data.expenses.reduce((a, x) => a + x.amount, 0);
-
-  el.innerHTML = `
-    <h2>Reports / Z-Reading</h2>
-    <p>Total recorded sales: <b>${money(sales)}</b></p>
-    <p>Total recorded expenses: <b>${money(expenses)}</b></p>
-    <p>Estimated profit: <b>${money(sales-cost-expenses)}</b></p>
-    <p class="note">This is a simple summary, not a certified BIR Z-reading.</p>
-    <button onclick="exportBackup()">Export Backup</button>`;
-}
-
-function customersPage(el) {
-  el.innerHTML = `
-    <h2>Customers / Utang</h2>
-    <label>Customer Name</label>
-    <input id="cn">
-    <label>Birthday</label>
-    <input id="cb" type="date">
-    <label>Address</label>
-    <input id="ca">
-    <button onclick="addCustomer()">Save Customer</button>
-    <h3>Customer List</h3>
-    ${data.customers.map(c => `
-      <p><b>${escapeHTML(c.name)}</b> — ${escapeHTML(c.address)}</p>
-    `).join("")}
-    <h3>Unpaid Utang</h3>
-    ${data.sales.filter(s => !s.paid).map(s => `
-      <p>${escapeHTML(s.customer)} — ${escapeHTML(s.product)} — ${money(s.total)}</p>
-    `).join("")}`;
-}
-
-function addCustomer() {
-  const name = document.getElementById("cn").value.trim();
-  if (!name) return alert("Enter the customer name.");
-
-  data.customers.push({
-    name,
-    birthday: document.getElementById("cb").value,
-    address: document.getElementById("ca").value.trim()
-  });
-
-  save();
-  page("customers");
-}
-
-function subscriptionPage(el) {
-  el.innerHTML = `
-    <h2>Subscription Center</h2>
-    <div class="card">
-      <h3>Monthly Plan</h3>
-      <p>₱49/month per additional cashier.</p>
-      <p>One cashier account is included per subscriber.</p>
-    </div>
-    <div class="card">
-      <h3>Lifetime Plan</h3>
-      <p>₱20,000 one-time payment.</p>
-      <p>Unlimited items and 40 additional cashiers.</p>
-    </div>
-    <button onclick="makeInvite()">Create Invite Link</button>
-    <p id="inviteResult"></p>
-    <p class="note">
-      Demo only: this button creates a link to the current website.
-      Registration, payment verification, and owner approval are not
-      connected yet. Do not accept payments based only on this demo.
-    </p>`;
-}
-
-function makeInvite() {
-  const link = location.href.split("?")[0] + "?join=quickmart";
-  const el = document.getElementById("inviteResult");
-  el.innerHTML = `<label>Invite link</label>
-    <input id="inviteLink" value="${escapeHTML(link)}" readonly>
-    <button onclick="copyInvite()">Copy Link</button>`;
-}
-
-function copyInvite() {
-  const input = document.getElementById("inviteLink");
-  input.select();
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(input.value)
-      .then(() => alert("Link copied."));
-  } else {
-    alert("Please copy the selected link manually.");
-  }
-}
-
-function chatPage(el) {
-  el.innerHTML = `
-    <h2>Chat with Owner</h2>
-    <p class="note">
-      Chat preview only. Messages are saved in this browser and are
-      not sent to the owner or other subscribers.
-    </p>
-    <div id="chatMessages"></div>
-    <label>Message</label>
-    <textarea id="chatInput" placeholder="Type your message"></textarea>
-    <button onclick="sendMessage()">Send</button>`;
-  showMessages();
-}
-
-function sendMessage() {
-  const input = document.getElementById("chatInput");
-  const message = input.value.trim();
-  if (!message) return;
-
-  data.messages.push({
-    message,
-    date: new Date().toLocaleString()
-  });
-
-  save();
-  page("chat");
-}
-
-function showMessages() {
-  const el = document.getElementById("chatMessages");
-  if (!el) return;
-  el.innerHTML = data.messages.map(m => `
-    <div class="card">
-      ${escapeHTML(m.message)}
-      <p>${escapeHTML(m.date)}</p>
-    </div>`).join("");
-}
-
-function settingsPage(el) {
-  el.innerHTML = `
-    <h2>Store Settings</h2>
-    <label>Store Name</label>
-    <input id="st" value="${escapeHTML(data.settings.store)}">
-    <label>Owner Name</label>
-    <input id="so" value="${escapeHTML(data.settings.owner)}">
-    <label>Font</label>
-    <select id="sf">
-      <option>Arial</option>
-      <option>Verdana</option>
-      <option>Georgia</option>
-      <option>Tahoma</option>
-    </select>
-    <button onclick="saveSettings()">Save Settings</button>
-    <p>Made by: Marlon Del Pilar</p>`;
-}
-
-function saveSettings() {
-  data.settings.store = document.getElementById("st").value.trim();
-  data.settings.owner = document.getElementById("so").value.trim();
-  data.settings.font = document.getElementById("sf").value;
-
-  document.body.style.fontFamily = data.settings.font;
-  document.getElementById("storeTitle").textContent = data.settings.store;
-  save();
-  alert("Settings saved.");
-}
-
-function metrics() {
-  const sales = data.sales.reduce((a,s) => a+s.total, 0);
-  const cost = data.sales.filter(s => s.paid)
-    .reduce((a,s) => a+s.cost*s.qty, 0);
-  const expenses = data.expenses.reduce((a,x) => a+x.amount, 0);
-
-  document.getElementById("todaySales").textContent = money(sales);
-  document.getElementById("productCount").textContent = data.products.length;
-  document.getElementById("expenseTotal").textContent = money(expenses);
-  document.getElementById("profitTotal").textContent =
-    money(sales-cost-expenses);
-}
-
-function exportBackup() {
-  const blob = new Blob([JSON.stringify(data,null,2)], {
-    type: "application/json"
-  });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "quickmart-backup.json";
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
-
-document.getElementById("storeTitle").textContent = data.settings.store;
+calculate();
+renderHistory();
 </script>
 </body>
 </html>
